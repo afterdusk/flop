@@ -1,9 +1,10 @@
-import React from "react";
+import React, { FC, ReactElement } from "react";
 import styled from "styled-components";
+import Format from "./components/Format";
 import * as Constants from "./constants";
 
 const Wrapper = styled.div`
-  width: 100vw;
+  width: 100%;
   height: 100%;
   min-height: 100%;
   box-sizing: border-box;
@@ -26,16 +27,19 @@ const Wrapper = styled.div`
 `;
 
 const Header = styled.header`
-  font-size: 1.8rem;
+  padding: 2em;
 `;
 
-const Title = styled.h1``;
+const Title = styled.h1`
+  font-size: 2.4rem;
+`;
 
-const App: React.FC = () => (
+const App: FC = (): ReactElement => (
   <Wrapper>
     <Header>
       <Title>{Constants.APP_TITLE}</Title>
     </Header>
+    <Format />
   </Wrapper>
 );
 

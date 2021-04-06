@@ -67,8 +67,11 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,css,md}": [
+    "*.{js,jsx,ts,tsx,json,css}": [
       "yarn lint",
+      "yarn pretty"
+    ],
+    "*.{md}": [
       "yarn pretty"
     ]
   }

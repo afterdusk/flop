@@ -1,6 +1,6 @@
 # flop
 
-IEEE-754 style floating point converter
+IEEE 754-style floating point converter
 
 ## Available Scripts
 

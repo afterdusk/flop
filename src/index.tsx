@@ -5,7 +5,7 @@ import reportWebVitals from "./reportWebVitals";
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
-  body, #root {
+  html, body, #root {
     height: 100%;
     width: 100%;
     margin: 0;
