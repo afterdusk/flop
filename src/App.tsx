@@ -28,7 +28,7 @@ const Wrapper = styled.div`
 `;
 
 const Header = styled.header`
-  padding: 2em;
+  padding: 2rem;
 `;
 
 const Title = styled.h1`
@@ -44,7 +44,13 @@ const App: FC = (): ReactElement => (
     <Header>
       <Title>{Constants.APP_TITLE}</Title>
     </Header>
-    <Format />
+    <Format {...Constants.FP32} />
+    {/*
+    <Format {...Constants.FP64} />
+    <Format {...Constants.FP16} />
+    <Format {...Constants.BF16} />
+    <Format {...Constants.TF32} />
+    */}
   </Wrapper>
 );
 

@@ -20,7 +20,9 @@ const Col = styled.div`
   align-items: center;
 `;
 
-const FieldName = styled.div``;
+const FieldName = styled.div`
+  white-space: nowrap;
+`;
 
 const InputField = styled.input`
   width: 100%;
@@ -35,29 +37,28 @@ const Panel: FC = (): ReactElement => (
   <Wrapper>
     {/* Decimal Input */}
     <Row>
-      <Col size={1}>
+      <Col size={2}>
         <FieldName>Decimal</FieldName>
       </Col>
-      <Col size={3}>
-        {" "}
+      <Col size={5}>
         <InputField type="text" />
       </Col>
     </Row>
     {/* Value Stored */}
     <Row>
-      <Col size={1}>
+      <Col size={2}>
         <FieldName>Value Stored</FieldName>
       </Col>
-      <Col size={3}>
+      <Col size={5}>
         <Field />
       </Col>
     </Row>
     {/* Error */}
     <Row>
-      <Col size={1}>
+      <Col size={2}>
         <FieldName>Error</FieldName>
       </Col>
-      <Col size={3}>
+      <Col size={5}>
         <Field />
       </Col>
     </Row>

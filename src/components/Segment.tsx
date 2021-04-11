@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
   box-sizing: border-box;
-  padding: 1rem;
+  padding: 0.2rem;
 
   display: flex;
   flex-direction: column;
@@ -17,14 +17,14 @@ const Title = styled.h4`
 const Field = styled.p`
   min-width: 100%;
   box-sizing: border-box;
-  padding: 0.4em;
+  padding: 0.4rem;
   margin: 0;
 `;
 
 const BitField = styled.div`
   min-width: 100%;
   box-sizing: border-box;
-  padding: 0.4em;
+  padding: 0.4rem;
   margin: 0;
 
   display: flex;
@@ -35,18 +35,24 @@ const BitField = styled.div`
 type SegmentProps = {
   name: string;
   value: string;
-  decimal: string;
-  width: number;
+  decimal: number;
+  bits: boolean[];
+  onUpdate: (index: number) => void;
 };
 
 const Segment: FC<SegmentProps> = (props: SegmentProps): ReactElement => (
   <Wrapper>
     <Title>{props.name}</Title>
     <Field>{props.value}</Field>
-    <Field>{props.decimal}</Field>
+    <Field>{props.decimal.toString()}</Field>
     <BitField>
-      {[...Array(props.width)].map((e, i) => (
-        <input key={i} type="checkbox" />
+      {[...props.bits].map((e, i) => (
+        <input
+          key={i}
+          type="checkbox"
+          checked={e}
+          onChange={() => props.onUpdate(i)}
+        />
       ))}
     </BitField>
   </Wrapper>
