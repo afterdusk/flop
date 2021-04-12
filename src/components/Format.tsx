@@ -1,8 +1,13 @@
-import React, { FC, ReactElement, useState } from "react";
+import React, { FC, ReactElement, useEffect, useState } from "react";
 import Segment from "./Segment";
 import Panel from "./Panel";
 import styled from "styled-components";
-import { stringifyBits } from "../Flop";
+import {
+  stringifyFlop,
+  convertFlop754ToFlop,
+  generateFlop754,
+  stringifyBits,
+} from "../Flop";
 
 const Wrapper = styled.div`
   max-width: 100%;
@@ -28,12 +33,15 @@ type FormatProps = {
 };
 
 const Format: FC<FormatProps> = (props: FormatProps): ReactElement => {
-  const [sign, setSign] = useState(Array.of(false));
-  const [exponent, setExponent] = useState(
-    new Array(props.exponentWidth).fill(false)
-  );
-  const [significand, setSignificand] = useState(
-    new Array(props.significandWidth).fill(false)
+  const defaultSign = Array.of(false);
+  const defaultExponent = new Array(props.exponentWidth).fill(false);
+  const defaultSignificand = new Array(props.significandWidth).fill(false);
+
+  const [sign, setSign] = useState(defaultSign);
+  const [exponent, setExponent] = useState(defaultExponent);
+  const [significand, setSignificand] = useState(defaultSignificand);
+  const [flop754, setFlop754] = useState(
+    generateFlop754(defaultSign[0], defaultExponent, defaultSignificand)
   );
 
   // Callback function for segment UI to update bits
@@ -46,6 +54,10 @@ const Format: FC<FormatProps> = (props: FormatProps): ReactElement => {
       !prev[index],
       ...prev.slice(index + 1),
     ]);
+
+  useEffect(() => {
+    setFlop754(generateFlop754(sign[0], exponent, significand));
+  }, [sign, exponent, significand]);
 
   return (
     <Wrapper>
@@ -73,7 +85,7 @@ const Format: FC<FormatProps> = (props: FormatProps): ReactElement => {
           onUpdate={(index: number) => setSegmentBits(index, setSignificand)}
         />
       </Segments>
-      <Panel />
+      <Panel stored={stringifyFlop(convertFlop754ToFlop(flop754))} />
     </Wrapper>
   );
 };

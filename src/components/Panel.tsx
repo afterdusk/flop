@@ -28,12 +28,11 @@ const InputField = styled.input`
   width: 100%;
 `;
 
-const Field = styled.p`
-  width: 100%;
-  margin: 0;
-`;
+type PanelProps = {
+  stored: string;
+};
 
-const Panel: FC = (): ReactElement => (
+const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => (
   <Wrapper>
     {/* Decimal Input */}
     <Row>
@@ -50,7 +49,7 @@ const Panel: FC = (): ReactElement => (
         <FieldName>Value Stored</FieldName>
       </Col>
       <Col size={5}>
-        <Field />
+        <InputField disabled readOnly value={props.stored} />
       </Col>
     </Row>
     {/* Error */}
@@ -59,7 +58,7 @@ const Panel: FC = (): ReactElement => (
         <FieldName>Error</FieldName>
       </Col>
       <Col size={5}>
-        <Field />
+        <InputField disabled readOnly />
       </Col>
     </Row>
   </Wrapper>

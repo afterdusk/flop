@@ -1,4 +1,5 @@
 import BigNumber from "bignumber.js";
+import * as Constants from "./constants";
 
 /**
  * Represents a floating-point value.
@@ -40,14 +41,21 @@ export const generateFlop754 = (
   exponent: boolean[],
   significand: boolean[]
 ): Flop754 => {
-  const bias = getExponentBias(exponent.length);
-  const parsedExponent = parseInt(stringifyBits(exponent), 2) - bias;
-  const parsedSignificand = new BigNumber("1." + stringifyBits(significand), 2);
+  const parsedExponent = parseInt(stringifyBits(exponent), 2);
+  const parsedBinarySignificand = stringifyBits(significand);
+
+  const adjustedExponent =
+    (parsedExponent > 0 ? parsedExponent : 1) -
+    getExponentBias(exponent.length);
+  const adjustedSignificand = new BigNumber(
+    (parsedExponent > 0 ? "1." : ".") + parsedBinarySignificand,
+    2
+  );
 
   return {
     sign,
-    exponent: parsedExponent,
-    significand: parsedSignificand,
+    exponent: adjustedExponent,
+    significand: adjustedSignificand,
   };
 };
 
@@ -57,6 +65,9 @@ export const generateFlop754 = (
  * @returns resulting Flop object
  */
 export const convertFlop754ToFlop = (flop754: Flop754): Flop => {
+  // TODO: Set this globally
+  BigNumber.set({ DECIMAL_PLACES: Constants.BIGNUMBER_DECIMAL_PLACES });
+
   const coeff = new BigNumber(2).exponentiatedBy(flop754.exponent);
   let value = flop754.significand.times(coeff);
   value = flop754.sign ? value.negated() : value;
