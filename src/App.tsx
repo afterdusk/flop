@@ -1,7 +1,7 @@
 import React, { FC, ReactElement } from "react";
 import styled from "styled-components";
 import Format from "./components/Format";
-import * as Constants from "./constants";
+import * as Constants from "./Constants";
 import { Helmet } from "react-helmet";
 
 const Wrapper = styled.div`
