@@ -65,15 +65,15 @@ export const generateFlop754 = (
   exponent: boolean[],
   significand: boolean[]
 ): Flop754 => {
-  const type = exponent.every((e) => !e)
-    ? Flop754Type.SUBNORMAL
-    : exponent.every((e) => e)
-    ? significand.every((e) => !e)
-      ? sign
-        ? Flop754Type.NEGATIVE_INFINITY
-        : Flop754Type.POSITIVE_INFINITY
-      : Flop754Type.NAN
-    : Flop754Type.NORMAL;
+  const type = exponent.some((e) => e)
+    ? exponent.every((e) => e)
+      ? significand.every((e) => !e)
+        ? sign
+          ? Flop754Type.NEGATIVE_INFINITY
+          : Flop754Type.POSITIVE_INFINITY
+        : Flop754Type.NAN
+      : Flop754Type.NORMAL
+    : Flop754Type.SUBNORMAL;
   const adjustedExponent =
     (type === Flop754Type.SUBNORMAL
       ? 1
