@@ -3,6 +3,9 @@ export const BACKGROUND_COLOR = "#282c34";
 
 // app
 export const APP_TITLE = "IEEE 754-Style Floating-Point Converter";
+export const POSITIVE_INFINITY_STRING = "infinity";
+export const NEGATIVE_INFINITY_STRING = "-infinity";
+export const NAN_STRING = "NaN";
 
 // bignumber.js
 export const BIGNUMBER_DECIMAL_PLACES = 300;

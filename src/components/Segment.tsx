@@ -44,7 +44,7 @@ const Segment: FC<SegmentProps> = (props: SegmentProps): ReactElement => (
   <Wrapper>
     <Title>{props.name}</Title>
     <Field>{props.value}</Field>
-    <Field>{props.decimal.toString()}</Field>
+    <Field>{props.decimal.toFixed()}</Field>
     <BitField>
       {[...props.bits].map((e, i) => (
         <input

@@ -6,7 +6,18 @@ import * as Constants from "./constants";
  * Precision is unbounded.
  */
 export interface Flop {
+  type: FlopType;
   value: BigNumber;
+}
+
+/**
+ * Types of floating-point values.
+ */
+export enum FlopType {
+  NORMAL,
+  POSITIVE_INFINITY,
+  NEGATIVE_INFINITY,
+  NAN,
 }
 
 /**
@@ -14,9 +25,21 @@ export interface Flop {
  * Precision is unbounded.
  */
 export interface Flop754 {
+  type: Flop754Type;
   sign: boolean;
   exponent: number;
   significand: BigNumber;
+}
+
+/**
+ * Types of IEEE 754 values.
+ */
+export enum Flop754Type {
+  NORMAL,
+  SUBNORMAL,
+  POSITIVE_INFINITY,
+  NEGATIVE_INFINITY,
+  NAN,
 }
 
 /**
@@ -25,8 +48,9 @@ export interface Flop754 {
  * @returns Flop object
  */
 export const generateFlop = (decimal: string): Flop => {
+  const type = FlopType.NORMAL;
   const value = new BigNumber(decimal);
-  return { value };
+  return { type, value };
 };
 
 /**
@@ -41,18 +65,27 @@ export const generateFlop754 = (
   exponent: boolean[],
   significand: boolean[]
 ): Flop754 => {
-  const parsedExponent = parseInt(stringifyBits(exponent), 2);
-  const parsedBinarySignificand = stringifyBits(significand);
-
+  const type = exponent.every((e) => !e)
+    ? Flop754Type.SUBNORMAL
+    : exponent.every((e) => e)
+    ? significand.every((e) => !e)
+      ? sign
+        ? Flop754Type.NEGATIVE_INFINITY
+        : Flop754Type.POSITIVE_INFINITY
+      : Flop754Type.NAN
+    : Flop754Type.NORMAL;
   const adjustedExponent =
-    (parsedExponent > 0 ? parsedExponent : 1) -
+    (type === Flop754Type.SUBNORMAL
+      ? 1
+      : parseInt(stringifyBits(exponent), 2)) -
     getExponentBias(exponent.length);
   const adjustedSignificand = new BigNumber(
-    (parsedExponent > 0 ? "1." : ".") + parsedBinarySignificand,
+    (type === Flop754Type.SUBNORMAL ? "." : "1.") + stringifyBits(significand),
     2
   );
 
   return {
+    type,
     sign,
     exponent: adjustedExponent,
     significand: adjustedSignificand,
@@ -68,10 +101,24 @@ export const convertFlop754ToFlop = (flop754: Flop754): Flop => {
   // TODO: Set this globally
   BigNumber.set({ DECIMAL_PLACES: Constants.BIGNUMBER_DECIMAL_PLACES });
 
-  const coeff = new BigNumber(2).exponentiatedBy(flop754.exponent);
-  let value = flop754.significand.times(coeff);
-  value = flop754.sign ? value.negated() : value;
-  return { value };
+  const type = (() => {
+    switch (flop754.type) {
+      case Flop754Type.POSITIVE_INFINITY:
+        return FlopType.POSITIVE_INFINITY;
+      case Flop754Type.NEGATIVE_INFINITY:
+        return FlopType.NEGATIVE_INFINITY;
+      case Flop754Type.NAN:
+        return FlopType.NAN;
+      case Flop754Type.NORMAL:
+      case Flop754Type.SUBNORMAL:
+        return FlopType.NORMAL;
+    }
+  })();
+  const exponent = new BigNumber(2).exponentiatedBy(flop754.exponent);
+  const value = flop754.significand.times(exponent);
+  const signedValue = flop754.sign ? value.negated() : value;
+
+  return { type, value: signedValue };
 };
 
 /**
@@ -79,10 +126,15 @@ export const convertFlop754ToFlop = (flop754: Flop754): Flop => {
  * @param flop object to be converted
  * @returns resulting Flop754 object
  */
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const convertFlopToFlop754 = (flop: Flop): Flop754 => {
   // TODO: Extract sign, convert to binary, normalize
-  return { sign: false, exponent: 0, significand: new BigNumber(0) };
+  return {
+    type: Flop754Type.NORMAL,
+    sign: false,
+    exponent: 0,
+    significand: new BigNumber(0),
+  };
 };
 
 /**
@@ -92,8 +144,9 @@ export const convertFlopToFlop754 = (flop: Flop): Flop754 => {
  * @returns resulting value as Flop object
  */
 export const calculateError = (accurate: Flop, stored: Flop): Flop => {
+  // TODO: Handle arithmetic with non-normal numbers
   const value = accurate.value.minus(stored.value);
-  return { value };
+  return { type: stored.type, value };
 };
 
 /**
@@ -102,7 +155,16 @@ export const calculateError = (accurate: Flop, stored: Flop): Flop => {
  * @returns decimal string
  */
 export const stringifyFlop = (flop: Flop): string => {
-  return flop.value.toString();
+  switch (flop.type) {
+    case FlopType.POSITIVE_INFINITY:
+      return Constants.POSITIVE_INFINITY_STRING;
+    case FlopType.NEGATIVE_INFINITY:
+      return Constants.NEGATIVE_INFINITY_STRING;
+    case FlopType.NAN:
+      return Constants.NAN_STRING;
+    case FlopType.NORMAL:
+      return flop.value.toFixed();
+  }
 };
 
 /**
