@@ -40,7 +40,7 @@ type SegmentProps = {
   onUpdate: (index: number) => void;
 };
 
-const Segment: FC<SegmentProps> = (props: SegmentProps): ReactElement => (
+const BitSegment: FC<SegmentProps> = (props: SegmentProps): ReactElement => (
   <Wrapper>
     <Title>{props.name}</Title>
     <Field>{props.value}</Field>
@@ -58,4 +58,4 @@ const Segment: FC<SegmentProps> = (props: SegmentProps): ReactElement => (
   </Wrapper>
 );
 
-export default Segment;
+export default BitSegment;

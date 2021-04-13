@@ -54,6 +54,15 @@ export const generateFlop = (decimal: string): Flop => {
 };
 
 /**
+ * @returns Flop object representing zero.
+ */
+export const defaultFlop = (): Flop => {
+  const type = FlopType.NORMAL;
+  const value = new BigNumber(0);
+  return { type, value };
+};
+
+/**
  * Returns a Flop754 object from constituent boolean arrays representing bits.
  * @param sign sign bit
  * @param exponent exponent bits
@@ -90,6 +99,17 @@ export const generateFlop754 = (
     exponent: adjustedExponent,
     significand: adjustedSignificand,
   };
+};
+
+/**
+ * @returns Flop754 object representing zero.
+ */
+export const defaultFlop754 = (): Flop754 => {
+  const type = Flop754Type.NORMAL;
+  const sign = false;
+  const exponent = 0;
+  const significand = new BigNumber(0);
+  return { type, sign, exponent, significand };
 };
 
 /**

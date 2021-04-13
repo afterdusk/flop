@@ -3,13 +3,13 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
   box-sizing: border-box;
-  padding: 1rem;
+  padding: 1rem 0;
 `;
 
 const Row = styled.div`
   min-width: 100%;
   min-height: 1.4rem;
-  padding: 0.4rem;
+  padding: 0.2rem;
 
   display: flex;
 `;
@@ -37,7 +37,7 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => (
     {/* Decimal Input */}
     <Row>
       <Col size={2}>
-        <FieldName>Decimal</FieldName>
+        <FieldName>Decimal Input</FieldName>
       </Col>
       <Col size={5}>
         <InputField type="text" />
