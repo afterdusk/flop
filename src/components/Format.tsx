@@ -2,12 +2,7 @@ import React, { FC, ReactElement, useState } from "react";
 import Panel from "./Panel";
 import BitPanel from "./BitPanel";
 import styled from "styled-components";
-import {
-  Flop754,
-  stringifyFlop,
-  convertFlop754ToFlop,
-  defaultFlop754,
-} from "../Flop";
+import * as Flop from "../Flop";
 
 const Wrapper = styled.div`
   max-width: 100%;
@@ -28,18 +23,24 @@ type FormatProps = {
 };
 
 const Format: FC<FormatProps> = (props: FormatProps): ReactElement => {
-  const [flop754, setFlop754] = useState(defaultFlop754());
+  const [flop754, setFlop754] = useState(Flop.defaultFlop754());
+  const [flop, setFlop] = useState(Flop.defaultFlop());
 
-  // Callback for BitPanel to update value
-  const onFlop754Update = (value: Flop754) => {
+  const onFlop754Update = (value: Flop.Flop754) => {
     setFlop754(value);
+    setFlop(Flop.convertFlop754ToFlop(value));
+  };
+
+  const onFlopUpdate = (value: Flop.Flop) => {
+    setFlop(value);
+    // TODO: Update Flop754 value
   };
 
   return (
     <Wrapper>
       <Title>{props.name}</Title>
-      <Panel stored={stringifyFlop(convertFlop754ToFlop(flop754))} />
-      <BitPanel {...props} onValueUpdate={onFlop754Update} />
+      <Panel stored={Flop.stringifyFlop(flop)} onValueUpdate={onFlopUpdate} />
+      <BitPanel {...props} value={flop754} onValueUpdate={onFlop754Update} />
     </Wrapper>
   );
 };

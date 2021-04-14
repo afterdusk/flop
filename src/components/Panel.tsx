@@ -1,5 +1,6 @@
-import React, { FC, ReactElement } from "react";
+import React, { FC, useState, ReactElement, useEffect } from "react";
 import styled from "styled-components";
+import * as Flop from "../Flop";
 
 const Wrapper = styled.div`
   box-sizing: border-box;
@@ -30,38 +31,50 @@ const InputField = styled.input`
 
 type PanelProps = {
   stored: string;
+  onValueUpdate: (value: Flop.Flop) => void;
 };
 
-const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => (
-  <Wrapper>
-    {/* Decimal Input */}
-    <Row>
-      <Col size={2}>
-        <FieldName>Decimal Input</FieldName>
-      </Col>
-      <Col size={5}>
-        <InputField type="text" />
-      </Col>
-    </Row>
-    {/* Value Stored */}
-    <Row>
-      <Col size={2}>
-        <FieldName>Value Stored</FieldName>
-      </Col>
-      <Col size={5}>
-        <InputField disabled readOnly value={props.stored} />
-      </Col>
-    </Row>
-    {/* Error */}
-    <Row>
-      <Col size={2}>
-        <FieldName>Error</FieldName>
-      </Col>
-      <Col size={5}>
-        <InputField disabled readOnly />
-      </Col>
-    </Row>
-  </Wrapper>
-);
+const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
+  const [decimal, setDecimal] = useState((0).toString());
+
+  useEffect(() => {
+    props.onValueUpdate(Flop.generateFlop(decimal));
+  }, [decimal]);
+
+  return (
+    <Wrapper>
+      {/* Decimal Input */}
+      <Row>
+        <Col size={2}>
+          <FieldName>Decimal Input</FieldName>
+        </Col>
+        <Col size={5}>
+          <InputField
+            type="text"
+            onChange={(e) => setDecimal(e.target.value)}
+          />
+        </Col>
+      </Row>
+      {/* Value Stored */}
+      <Row>
+        <Col size={2}>
+          <FieldName>Value Stored</FieldName>
+        </Col>
+        <Col size={5}>
+          <InputField disabled readOnly value={props.stored} />
+        </Col>
+      </Row>
+      {/* Error */}
+      <Row>
+        <Col size={2}>
+          <FieldName>Error</FieldName>
+        </Col>
+        <Col size={5}>
+          <InputField disabled readOnly />
+        </Col>
+      </Row>
+    </Wrapper>
+  );
+};
 
 export default Panel;

@@ -105,11 +105,54 @@ export const generateFlop754 = (
  * @returns Flop754 object representing zero.
  */
 export const defaultFlop754 = (): Flop754 => {
-  const type = Flop754Type.NORMAL;
+  const type = Flop754Type.SUBNORMAL;
   const sign = false;
   const exponent = 0;
   const significand = new BigNumber(0);
   return { type, sign, exponent, significand };
+};
+
+/**
+ * Deconstructs a Flop754 object into constituent boolean objects representing bits.
+ * @param flop754 Flop754 object to be deconstructed
+ * @param exponentWidth bit width of exponent segment
+ * @param significandWidth bit width of significand segment
+ * @returns variable for sign and arrays for exponent, significand
+ */
+// TODO: Implement the correct rounding mode
+export const deconstructFlop754 = (
+  flop754: Flop754,
+  exponentWidth: number,
+  significandWidth: number
+): {
+  sign: boolean;
+  exponent: boolean[];
+  significand: boolean[];
+} => {
+  const sign = flop754.sign;
+  const exponent = bitsFromString(
+    (() => {
+      switch (flop754.type) {
+        case Flop754Type.POSITIVE_INFINITY:
+        case Flop754Type.NEGATIVE_INFINITY:
+        case Flop754Type.NAN:
+          return "1".repeat(exponentWidth);
+        case Flop754Type.SUBNORMAL:
+          return "";
+        case Flop754Type.NORMAL:
+          return (flop754.exponent + getExponentBias(exponentWidth)).toString(
+            2
+          );
+      }
+    })().padStart(exponentWidth, "0")
+  );
+  const significand = bitsFromString(
+    (flop754.significand.toString(2).split(".")[1] ?? "")
+      .padEnd(significandWidth, "0")
+      .substring(0, significandWidth)
+  );
+
+  return { sign, exponent, significand };
 };
 
 /**
@@ -189,11 +232,20 @@ export const stringifyFlop = (flop: Flop): string => {
 
 /**
  * Converts bit array to binary string.
- * @param flop object to convert
+ * @param bits boolean array representing bits
  * @returns binary string
  */
 export const stringifyBits = (bits: boolean[]): string => {
   return bits.map((e) => (e ? "1" : "0")).join("");
+};
+
+/**
+ * Converts binary string to bit array.
+ * @param bitString binary string
+ * @returns boolean array representing bits
+ */
+export const bitsFromString = (bitString: string): boolean[] => {
+  return bitString.split("").map((e) => (e === "1" ? true : false));
 };
 
 /**
