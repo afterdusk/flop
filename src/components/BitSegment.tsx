@@ -37,7 +37,7 @@ type SegmentProps = {
   value: string;
   decimal: number;
   bits: boolean[];
-  onUpdate: (index: number) => void;
+  updateBits: (bits: boolean[]) => void;
 };
 
 const BitSegment: FC<SegmentProps> = (props: SegmentProps): ReactElement => (
@@ -51,7 +51,13 @@ const BitSegment: FC<SegmentProps> = (props: SegmentProps): ReactElement => (
           key={i}
           type="checkbox"
           checked={e}
-          onChange={() => props.onUpdate(i)}
+          onChange={() =>
+            props.updateBits([
+              ...props.bits.slice(0, i),
+              !props.bits[i],
+              ...props.bits.slice(i + 1),
+            ])
+          }
         />
       ))}
     </BitField>

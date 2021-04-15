@@ -15,7 +15,7 @@ type BitPanelProps = {
   exponentWidth: number;
   significandWidth: number;
   value: Flop.Flop754;
-  onValueUpdate: (value: Flop.Flop754) => void;
+  updateValue: (value: Flop.Flop754) => void;
 };
 
 const BitPanel: FC<BitPanelProps> = (props: BitPanelProps): ReactElement => {
@@ -24,19 +24,16 @@ const BitPanel: FC<BitPanelProps> = (props: BitPanelProps): ReactElement => {
     props.exponentWidth,
     props.significandWidth
   );
-  const signArray = Array.of(sign);
 
   return (
     <Wrapper>
       <BitSegment
         name="Sign"
         value={"x"}
-        decimal={parseInt(Flop.stringifyBits(signArray), 2)}
-        bits={signArray}
-        onUpdate={(index: number) =>
-          props.onValueUpdate(
-            Flop.generateFlop754(!signArray[index], exponent, significand)
-          )
+        decimal={parseInt(Flop.stringifyBits(sign), 2)}
+        bits={sign}
+        updateBits={(bits: boolean[]) =>
+          props.updateValue(Flop.generateFlop754(bits, exponent, significand))
         }
       />
       <BitSegment
@@ -44,18 +41,8 @@ const BitPanel: FC<BitPanelProps> = (props: BitPanelProps): ReactElement => {
         value={"x"}
         decimal={parseInt(Flop.stringifyBits(exponent), 2)}
         bits={exponent}
-        onUpdate={(index: number) =>
-          props.onValueUpdate(
-            Flop.generateFlop754(
-              sign,
-              [
-                ...exponent.slice(0, index),
-                !exponent[index],
-                ...exponent.slice(index + 1),
-              ],
-              significand
-            )
-          )
+        updateBits={(bits: boolean[]) =>
+          props.updateValue(Flop.generateFlop754(sign, bits, significand))
         }
       />
       <BitSegment
@@ -63,14 +50,8 @@ const BitPanel: FC<BitPanelProps> = (props: BitPanelProps): ReactElement => {
         value={"x"}
         decimal={parseInt(Flop.stringifyBits(significand), 2)}
         bits={significand}
-        onUpdate={(index: number) =>
-          props.onValueUpdate(
-            Flop.generateFlop754(sign, exponent, [
-              ...significand.slice(0, index),
-              !significand[index],
-              ...significand.slice(index + 1),
-            ])
-          )
+        updateBits={(bits: boolean[]) =>
+          props.updateValue(Flop.generateFlop754(sign, exponent, bits))
         }
       />
     </Wrapper>

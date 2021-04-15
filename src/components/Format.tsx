@@ -39,8 +39,8 @@ const Format: FC<FormatProps> = (props: FormatProps): ReactElement => {
   return (
     <Wrapper>
       <Title>{props.name}</Title>
-      <Panel stored={Flop.stringifyFlop(flop)} onValueUpdate={onFlopUpdate} />
-      <BitPanel {...props} value={flop754} onValueUpdate={onFlop754Update} />
+      <Panel stored={Flop.stringifyFlop(flop)} updateValue={onFlopUpdate} />
+      <BitPanel {...props} value={flop754} updateValue={onFlop754Update} />
     </Wrapper>
   );
 };

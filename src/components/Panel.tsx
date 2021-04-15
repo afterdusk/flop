@@ -31,14 +31,14 @@ const InputField = styled.input`
 
 type PanelProps = {
   stored: string;
-  onValueUpdate: (value: Flop.Flop) => void;
+  updateValue: (value: Flop.Flop) => void;
 };
 
 const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
   const [decimal, setDecimal] = useState((0).toString());
 
   useEffect(() => {
-    props.onValueUpdate(Flop.generateFlop(decimal));
+    props.updateValue(Flop.generateFlop(decimal));
   }, [decimal]);
 
   return (

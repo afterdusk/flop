@@ -70,19 +70,20 @@ export const defaultFlop = (): Flop => {
  * @returns Flop754 object
  */
 export const generateFlop754 = (
-  sign: boolean,
+  sign: boolean[],
   exponent: boolean[],
   significand: boolean[]
 ): Flop754 => {
   const type = exponent.some((e) => e)
     ? exponent.every((e) => e)
       ? significand.every((e) => !e)
-        ? sign
+        ? sign[0]
           ? Flop754Type.NEGATIVE_INFINITY
           : Flop754Type.POSITIVE_INFINITY
         : Flop754Type.NAN
       : Flop754Type.NORMAL
     : Flop754Type.SUBNORMAL;
+  const signBit = sign[0];
   const adjustedExponent =
     (type === Flop754Type.SUBNORMAL
       ? 1
@@ -95,7 +96,7 @@ export const generateFlop754 = (
 
   return {
     type,
-    sign,
+    sign: signBit,
     exponent: adjustedExponent,
     significand: adjustedSignificand,
   };
@@ -125,11 +126,11 @@ export const deconstructFlop754 = (
   exponentWidth: number,
   significandWidth: number
 ): {
-  sign: boolean;
+  sign: boolean[];
   exponent: boolean[];
   significand: boolean[];
 } => {
-  const sign = flop754.sign;
+  const sign = Array.of(flop754.sign);
   const exponent = bitsFromString(
     (() => {
       switch (flop754.type) {
