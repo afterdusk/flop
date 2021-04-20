@@ -24,22 +24,35 @@ type FormatProps = {
 
 const Format: FC<FormatProps> = (props: FormatProps): ReactElement => {
   const [flop754, setFlop754] = useState(Flop.defaultFlop754());
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [flop, setFlop] = useState(Flop.defaultFlop());
+  const [storedFlop, setStoredFlop] = useState(Flop.defaultFlop());
+  const [inputCleared, setInputCleared] = useState(false);
 
   const onFlop754Update = (value: Flop.Flop754) => {
     setFlop754(value);
-    setFlop(Flop.convertFlop754ToFlop(value));
+    setStoredFlop(Flop.convertFlop754ToFlop(value));
+    setInputCleared((prev) => !prev);
   };
 
   const onFlopUpdate = (value: Flop.Flop) => {
     setFlop(value);
-    // TODO: Update Flop754 value
+    const updated754Value = Flop.convertFlopToFlop754(
+      value,
+      props.exponentWidth
+    );
+    setFlop754(updated754Value);
+    setStoredFlop(Flop.convertFlop754ToFlop(updated754Value));
   };
 
   return (
     <Wrapper>
       <Title>{props.name}</Title>
-      <Panel stored={Flop.stringifyFlop(flop)} updateValue={onFlopUpdate} />
+      <Panel
+        inputCleared={inputCleared}
+        stored={Flop.stringifyFlop(storedFlop)}
+        updateValue={onFlopUpdate}
+      />
       <BitPanel {...props} value={flop754} updateValue={onFlop754Update} />
     </Wrapper>
   );

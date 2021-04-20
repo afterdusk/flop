@@ -3,7 +3,7 @@ import * as Constants from "./Constants";
 
 /**
  * Represents a floating-point value.
- * Precision is unbounded.
+ * Precision and range is unbounded.
  */
 export interface Flop {
   type: FlopType;
@@ -15,6 +15,7 @@ export interface Flop {
  */
 export enum FlopType {
   NORMAL,
+  // TODO: Merge the infinity states?
   POSITIVE_INFINITY,
   NEGATIVE_INFINITY,
   NAN,
@@ -22,7 +23,7 @@ export enum FlopType {
 
 /**
  * Represents a floating-point value in IEEE 754 style.
- * Precision is unbounded.
+ * Precision is unbounded but range is bounded.
  */
 export interface Flop754 {
   type: Flop754Type;
@@ -151,7 +152,17 @@ export const deconstructFlop754 = (
     })().padStart(exponentWidth, "0")
   );
   const significand = bitsFromString(
-    (flop754.significand.toString(2).split(".")[1] ?? "")
+    (() => {
+      switch (flop754.type) {
+        case Flop754Type.POSITIVE_INFINITY:
+        case Flop754Type.NEGATIVE_INFINITY:
+          return "0".repeat(significandWidth);
+        case Flop754Type.NAN:
+        case Flop754Type.SUBNORMAL:
+        case Flop754Type.NORMAL:
+          return flop754.significand.toString(2).split(".")[1] ?? "";
+      }
+    })()
       .padEnd(significandWidth, "0")
       .substring(0, significandWidth)
   );
@@ -193,14 +204,83 @@ export const convertFlop754ToFlop = (flop754: Flop754): Flop => {
  * @param flop object to be converted
  * @returns resulting Flop754 object
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const convertFlopToFlop754 = (flop: Flop): Flop754 => {
-  // TODO: Extract sign, convert to binary, normalize
+// TODO:
+// - Cleanup and optimize
+// - Address inconsistent handling of range and precision, one is bounded and
+//   and the other is not
+export const convertFlopToFlop754 = (
+  flop: Flop,
+  exponentWidth: number
+): Flop754 => {
+  // TODO: Set this globally
+  BigNumber.set({ DECIMAL_PLACES: Constants.BIGNUMBER_DECIMAL_PLACES });
+
+  // extract sign
+  const sign = flop.value.isNegative();
+
+  // convert to binary, normalize
+  const { min: minExponentRange, max: maxExponentRange } = getExponentRange(
+    exponentWidth
+  );
+
+  let integer: BigNumber = flop.value.abs().integerValue(BigNumber.ROUND_DOWN);
+  let fractional: BigNumber = flop.value.abs().minus(integer);
+  let exponent = 0;
+
+  const one = new BigNumber("1");
+  const two = new BigNumber("2");
+  const half = new BigNumber("0.5");
+
+  while (integer.isGreaterThan(one)) {
+    const rem = integer.modulo(two);
+    integer = integer.idiv(two);
+    fractional = fractional.div(two);
+    exponent++;
+    if (!rem.isZero()) {
+      fractional = fractional.plus(half);
+    }
+  }
+
+  while (integer.isZero() && exponent > minExponentRange) {
+    fractional = fractional.times(two);
+    const excess = fractional.integerValue(BigNumber.ROUND_DOWN);
+    if (!excess.isZero()) {
+      fractional = fractional.minus(excess);
+      integer = integer.plus(excess);
+    }
+    exponent--;
+  }
+
+  // set type
+  let type: Flop754Type = Flop754Type.NORMAL;
+  if (integer.isZero()) {
+    type = Flop754Type.SUBNORMAL;
+  }
+  if (exponent > maxExponentRange) {
+    type = sign ? Flop754Type.NEGATIVE_INFINITY : Flop754Type.POSITIVE_INFINITY;
+  }
+
+  const significand = integer.plus(fractional);
+
+  // TODO: Is this necessary?
+  // override type assignment if FlopType is set
+  switch (flop.type) {
+    case FlopType.POSITIVE_INFINITY:
+      type = Flop754Type.POSITIVE_INFINITY;
+      break;
+    case FlopType.NEGATIVE_INFINITY:
+      type = Flop754Type.NEGATIVE_INFINITY;
+      break;
+    case FlopType.NAN:
+      type = Flop754Type.NAN;
+      break;
+  }
+
   return {
-    type: Flop754Type.NORMAL,
-    sign: false,
-    exponent: 0,
-    significand: new BigNumber(0),
+    type,
+    sign,
+    exponent,
+    significand,
   };
 };
 

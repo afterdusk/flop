@@ -30,6 +30,7 @@ const InputField = styled.input`
 `;
 
 type PanelProps = {
+  inputCleared: boolean;
   stored: string;
   updateValue: (value: Flop.Flop) => void;
 };
@@ -49,10 +50,20 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
           <FieldName>Decimal Input</FieldName>
         </Col>
         <Col size={5}>
-          <InputField
-            type="text"
-            onChange={(e) => setDecimal(e.target.value)}
-          />
+          {/* Workaround for parent to clear input field.
+              TODO: Find a better way to do this. */}
+          {props.inputCleared && (
+            <InputField
+              type="text"
+              onChange={(e) => setDecimal(e.target.value)}
+            />
+          )}
+          {!props.inputCleared && (
+            <InputField
+              type="text"
+              onChange={(e) => setDecimal(e.target.value)}
+            />
+          )}
         </Col>
       </Row>
       {/* Value Stored */}
