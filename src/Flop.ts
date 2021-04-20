@@ -74,6 +74,9 @@ export const generateFlop754 = (
   exponent: boolean[],
   significand: boolean[]
 ): Flop754 => {
+  // TODO: Set this globally
+  BigNumber.set({ DECIMAL_PLACES: Constants.BIGNUMBER_DECIMAL_PLACES });
+
   const type = exponent.some((e) => e)
     ? exponent.every((e) => e)
       ? significand.every((e) => !e)
