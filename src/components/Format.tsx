@@ -25,7 +25,7 @@ type FormatProps = {
 const Format: FC<FormatProps> = (props: FormatProps): ReactElement => {
   const [flop754, setFlop754] = useState(Flop.defaultFlop754());
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [flop, setFlop] = useState(Flop.defaultFlop());
+  const [flop, setFlop] = useState(Flop.defaultFlop()); // TODO: this should be an optional
   const [storedFlop, setStoredFlop] = useState(Flop.defaultFlop());
   const [inputCleared, setInputCleared] = useState(false);
 
@@ -39,7 +39,8 @@ const Format: FC<FormatProps> = (props: FormatProps): ReactElement => {
     setFlop(value);
     const updated754Value = Flop.convertFlopToFlop754(
       value,
-      props.exponentWidth
+      props.exponentWidth,
+      props.significandWidth
     );
     setFlop754(updated754Value);
     setStoredFlop(Flop.convertFlop754ToFlop(updated754Value));

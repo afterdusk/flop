@@ -23,7 +23,9 @@ export enum FlopType {
 
 /**
  * Represents a floating-point value in IEEE 754 style.
- * Precision is unbounded but range is bounded.
+ * Precision and range is implicitly bounded by exponent and
+ * significand widths used during intialization, but otherwise
+ * the interface imposes no bounds.
  */
 export interface Flop754 {
   type: Flop754Type;
@@ -202,15 +204,15 @@ export const convertFlop754ToFlop = (flop754: Flop754): Flop => {
 /**
  * Converts a Flop object to a Flop754 object.
  * @param flop object to be converted
+ * @param exponentWidth exponent bit size of target IEEE 754 type
+ * @param significandWidth significand bit size of target IEEE 754 type
  * @returns resulting Flop754 object
  */
-// TODO:
-// - Cleanup and optimize
-// - Address inconsistent handling of range and precision, one is bounded and
-//   and the other is not
+// TODO: Cleanup and optimize
 export const convertFlopToFlop754 = (
   flop: Flop,
-  exponentWidth: number
+  exponentWidth: number,
+  significandWidth: number
 ): Flop754 => {
   // TODO: Set this globally
   BigNumber.set({ DECIMAL_PLACES: Constants.BIGNUMBER_DECIMAL_PLACES });
@@ -260,7 +262,17 @@ export const convertFlopToFlop754 = (
     type = sign ? Flop754Type.NEGATIVE_INFINITY : Flop754Type.POSITIVE_INFINITY;
   }
 
-  const significand = integer.plus(fractional);
+  // TODO: Fix this abomination and implement correct rounding
+  const significand = integer.plus(
+    new BigNumber(
+      "." +
+        (fractional.toString(2).split(".")[1] ?? "").substring(
+          0,
+          significandWidth
+        ),
+      2
+    )
+  );
 
   // TODO: Is this necessary?
   // override type assignment if FlopType is set
