@@ -30,17 +30,27 @@ const InputField = styled.input`
 `;
 
 type PanelProps = {
-  inputCleared: boolean;
+  clearInput: boolean;
   stored: string;
+  error: string;
   updateValue: (value: Flop.Flop) => void;
+  inputCleared: () => void;
 };
 
 const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
-  const [decimal, setDecimal] = useState((0).toString());
+  const [decimal, setDecimal] = useState("");
 
   useEffect(() => {
-    props.updateValue(Flop.generateFlop(decimal));
-  }, [decimal]);
+    if (props.clearInput) {
+      setDecimal("");
+      props.inputCleared();
+    }
+  }, [props.clearInput]);
+
+  const onDecimalInput = (input: string) => {
+    setDecimal(input);
+    props.updateValue(Flop.generateFlop(input));
+  };
 
   return (
     <Wrapper>
@@ -50,20 +60,11 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
           <FieldName>Decimal Input</FieldName>
         </Col>
         <Col size={5}>
-          {/* Workaround for parent to clear input field.
-              TODO: Find a better way to do this. */}
-          {props.inputCleared && (
-            <InputField
-              type="text"
-              onChange={(e) => setDecimal(e.target.value)}
-            />
-          )}
-          {!props.inputCleared && (
-            <InputField
-              type="text"
-              onChange={(e) => setDecimal(e.target.value)}
-            />
-          )}
+          <InputField
+            type="text"
+            value={decimal}
+            onChange={(e) => onDecimalInput(e.target.value)}
+          />
         </Col>
       </Row>
       {/* Value Stored */}
@@ -81,7 +82,7 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
           <FieldName>Error</FieldName>
         </Col>
         <Col size={5}>
-          <InputField disabled readOnly />
+          <InputField disabled readOnly value={props.error} />
         </Col>
       </Row>
     </Wrapper>

@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useState } from "react";
+import React, { FC, ReactElement, useEffect, useState } from "react";
 import Panel from "./Panel";
 import BitPanel from "./BitPanel";
 import styled from "styled-components";
@@ -24,15 +24,16 @@ type FormatProps = {
 
 const Format: FC<FormatProps> = (props: FormatProps): ReactElement => {
   const [flop754, setFlop754] = useState(Flop.defaultFlop754());
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [flop, setFlop] = useState(Flop.defaultFlop()); // TODO: this should be an optional
+  const [flop, setFlop] = useState<null | Flop.Flop>(null);
   const [storedFlop, setStoredFlop] = useState(Flop.defaultFlop());
-  const [inputCleared, setInputCleared] = useState(false);
+  const [error, setError] = useState<null | Flop.Flop>(null);
+  const [clearInput, setClearInput] = useState(false);
 
   const onFlop754Update = (value: Flop.Flop754) => {
     setFlop754(value);
+    setFlop(null);
     setStoredFlop(Flop.convertFlop754ToFlop(value));
-    setInputCleared((prev) => !prev);
+    setClearInput(true);
   };
 
   const onFlopUpdate = (value: Flop.Flop) => {
@@ -46,13 +47,19 @@ const Format: FC<FormatProps> = (props: FormatProps): ReactElement => {
     setStoredFlop(Flop.convertFlop754ToFlop(updated754Value));
   };
 
+  useEffect(() => {
+    setError(flop ? Flop.calculateError(flop, storedFlop) : null);
+  }, [flop, storedFlop]);
+
   return (
     <Wrapper>
       <Title>{props.name}</Title>
       <Panel
-        inputCleared={inputCleared}
+        clearInput={clearInput}
         stored={Flop.stringifyFlop(storedFlop)}
+        error={error ? Flop.stringifyFlop(error) : ""}
         updateValue={onFlopUpdate}
+        inputCleared={() => setClearInput(false)}
       />
       <BitPanel {...props} value={flop754} updateValue={onFlop754Update} />
     </Wrapper>
