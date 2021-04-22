@@ -126,7 +126,7 @@ export const defaultFlop754 = (): Flop754 => {
  * @param significandWidth bit width of significand segment
  * @returns variable for sign and arrays for exponent, significand
  */
-// TODO: Implement the correct rounding mode
+// TODO: Handle implicit assumption that significand in flop754 fits width
 export const deconstructFlop754 = (
   flop754: Flop754,
   exponentWidth: number,
@@ -253,6 +253,15 @@ export const convertFlopToFlop754 = (
     exponent--;
   }
 
+  // TODO: Fix this abomination
+  ({ exponent, integer, fractional } = roundHalfToEven(
+    exponent,
+    integer,
+    fractional,
+    significandWidth
+  ));
+  const significand = integer.plus(fractional);
+
   // set type
   let type: Flop754Type = Flop754Type.NORMAL;
   if (integer.isZero()) {
@@ -261,18 +270,6 @@ export const convertFlopToFlop754 = (
   if (exponent > maxExponentRange) {
     type = sign ? Flop754Type.NEGATIVE_INFINITY : Flop754Type.POSITIVE_INFINITY;
   }
-
-  // TODO: Fix this abomination and implement correct rounding
-  const significand = integer.plus(
-    new BigNumber(
-      "." +
-        (fractional.toString(2).split(".")[1] ?? "").substring(
-          0,
-          significandWidth
-        ),
-      2
-    )
-  );
 
   // TODO: Is this necessary?
   // override type assignment if FlopType is set
@@ -366,4 +363,91 @@ export const getExponentRange = (
 export const getExponentBias = (width: number): number => {
   const range = Math.pow(2, width);
   return range / 2 - 1;
+};
+
+// http://pages.cs.wisc.edu/~markhill/cs354/Fall2008/notes/flpt.apprec.html
+// https://stackoverflow.com/questions/8981913/how-to-perform-round-to-even-with-floating-point-numbers
+// TODO: Cleanup and add docs
+export const roundHalfToEven = (
+  exponent: number,
+  integer: BigNumber,
+  fractional: BigNumber,
+  significandWidth: number
+): { exponent: number; integer: BigNumber; fractional: BigNumber } => {
+  const fractionalBits = fractional.toString(2).split(".")[1] ?? "";
+  // TODO: Is there a better way to handle this?
+  if (fractionalBits.length <= significandWidth) {
+    return { exponent, integer, fractional };
+  }
+
+  const G =
+    fractionalBits.substring(significandWidth, significandWidth + 1) ?? "0";
+  const R =
+    fractionalBits.substring(significandWidth + 1, significandWidth + 2) ?? "0";
+  const S =
+    fractionalBits.substring(significandWidth + 2, significandWidth + 3) ?? "0";
+
+  if (G === "1") {
+    // 111, 101, 110
+    if (R === "1" || S === "1") {
+      return roundHalfUp(exponent, integer, fractional, significandWidth);
+    }
+
+    // (1)100
+    const LSB = fractionalBits.substring(
+      significandWidth - 1,
+      significandWidth
+    );
+    if (LSB === "1") {
+      return roundHalfUp(exponent, integer, fractional, significandWidth);
+    }
+  }
+
+  // 0XX, (0)100
+  return {
+    exponent,
+    integer,
+    fractional: new BigNumber(fractionalBits.substring(0, significandWidth), 2),
+  };
+};
+
+// TODO: Cleanup and add docs
+export const roundHalfUp = (
+  exponent: number,
+  integer: BigNumber,
+  fractional: BigNumber,
+  significandWidth: number
+): { exponent: number; integer: BigNumber; fractional: BigNumber } => {
+  const fractionalBits = fractional.toString(2).split(".")[1] ?? "";
+  // TODO: Is there a better way to handle this?
+  if (fractionalBits.length <= significandWidth) {
+    return { exponent, integer, fractional };
+  }
+
+  let newExponent = exponent;
+  let newInteger = integer;
+  let newFractional = new BigNumber(
+    "." + fractionalBits.substring(0, significandWidth),
+    2
+  );
+  newFractional = newFractional.plus(
+    new BigNumber("." + "1".padStart(significandWidth, "0"), 2)
+  );
+
+  const excess = newFractional.integerValue(BigNumber.ROUND_DOWN);
+  if (!excess.isZero()) {
+    newFractional = newFractional.minus(excess);
+    // handle subnormal numbers
+    if (newInteger.isZero()) {
+      newInteger = new BigNumber("1");
+    } else {
+      newExponent = exponent + 1;
+    }
+  }
+
+  return {
+    exponent: newExponent,
+    integer: newInteger,
+    fractional: newFractional,
+  };
 };
