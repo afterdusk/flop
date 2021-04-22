@@ -407,7 +407,10 @@ export const roundHalfToEven = (
   return {
     exponent,
     integer,
-    fractional: new BigNumber(fractionalBits.substring(0, significandWidth), 2),
+    fractional: new BigNumber(
+      "." + fractionalBits.substring(0, significandWidth),
+      2
+    ),
   };
 };
 
