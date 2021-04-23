@@ -444,7 +444,7 @@ export const roundHalfUp = (
     if (newInteger.isZero()) {
       newInteger = new BigNumber("1");
     } else {
-      newExponent = exponent + 1;
+      newExponent++;
     }
   }
 

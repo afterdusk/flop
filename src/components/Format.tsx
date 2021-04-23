@@ -23,17 +23,15 @@ type FormatProps = {
 };
 
 const Format: FC<FormatProps> = (props: FormatProps): ReactElement => {
-  const [flop754, setFlop754] = useState(Flop.defaultFlop754());
   const [flop, setFlop] = useState<null | Flop.Flop>(null);
+  const [flop754, setFlop754] = useState(Flop.defaultFlop754());
   const [storedFlop, setStoredFlop] = useState(Flop.defaultFlop());
   const [error, setError] = useState<null | Flop.Flop>(null);
-  const [clearInput, setClearInput] = useState(false);
 
   const onFlop754Update = (value: Flop.Flop754) => {
-    setFlop754(value);
     setFlop(null);
+    setFlop754(value);
     setStoredFlop(Flop.convertFlop754ToFlop(value));
-    setClearInput(true);
   };
 
   const onFlopUpdate = (value: Flop.Flop) => {
@@ -55,11 +53,10 @@ const Format: FC<FormatProps> = (props: FormatProps): ReactElement => {
     <Wrapper>
       <Title>{props.name}</Title>
       <Panel
-        clearInput={clearInput}
+        clearInput={flop === null}
         stored={Flop.stringifyFlop(storedFlop)}
         error={error ? Flop.stringifyFlop(error) : ""}
         updateValue={onFlopUpdate}
-        inputCleared={() => setClearInput(false)}
       />
       <BitPanel {...props} value={flop754} updateValue={onFlop754Update} />
     </Wrapper>

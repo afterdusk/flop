@@ -34,7 +34,6 @@ type PanelProps = {
   stored: string;
   error: string;
   updateValue: (value: Flop.Flop) => void;
-  inputCleared: () => void;
 };
 
 const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
@@ -43,7 +42,6 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
   useEffect(() => {
     if (props.clearInput) {
       setDecimal("");
-      props.inputCleared();
     }
   }, [props.clearInput]);
 
