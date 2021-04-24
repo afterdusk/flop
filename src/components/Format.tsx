@@ -24,7 +24,9 @@ type FormatProps = {
 
 const Format: FC<FormatProps> = (props: FormatProps): ReactElement => {
   const [flop, setFlop] = useState<null | Flop.Flop>(null);
-  const [flop754, setFlop754] = useState(Flop.defaultFlop754());
+  const [flop754, setFlop754] = useState(
+    Flop.defaultFlop754(props.exponentWidth)
+  );
   const [storedFlop, setStoredFlop] = useState(Flop.defaultFlop());
   const [error, setError] = useState<null | Flop.Flop>(null);
 
@@ -76,7 +78,9 @@ const Format: FC<FormatProps> = (props: FormatProps): ReactElement => {
         {...props}
         sign={sign}
         exponent={exponent}
+        exponentValue={Flop.getExponent(flop754)}
         significand={significand}
+        significandValue={Flop.getSignificand(flop754)}
         updateValue={(
           sign: boolean[],
           exponent: boolean[],

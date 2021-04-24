@@ -109,14 +109,31 @@ export const generateFlop754 = (
 };
 
 /**
- * @returns Flop754 object representing zero.
+ * @param exponentWidth of the target type
+ * @returns Flop754 object representing zero
  */
-export const defaultFlop754 = (): Flop754 => {
+export const defaultFlop754 = (exponentWidth: number): Flop754 => {
   const type = Flop754Type.SUBNORMAL;
   const sign = false;
-  const exponent = 0;
+  const exponent = getExponentRange(exponentWidth).min;
   const significand = new BigNumber(0);
   return { type, sign, exponent, significand };
+};
+
+/**
+ * @param flop754 object to return exponent of
+ * @returns exponent value as a string
+ */
+export const getExponent = (flop754: Flop754): string => {
+  return flop754.exponent.toFixed();
+};
+
+/**
+ * @param flop754 object to return significand of
+ * @returns significand value as a string
+ */
+export const getSignificand = (flop754: Flop754): string => {
+  return flop754.significand.toFixed();
 };
 
 /**

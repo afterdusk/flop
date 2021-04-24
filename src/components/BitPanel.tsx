@@ -14,7 +14,9 @@ type BitPanelProps = {
   name: string;
   sign: boolean[];
   exponent: boolean[];
+  exponentValue: string;
   significand: boolean[];
+  significandValue: string;
   updateValue: (
     signBits: boolean[],
     exponentBits: boolean[],
@@ -27,7 +29,7 @@ const BitPanel: FC<BitPanelProps> = (props: BitPanelProps): ReactElement => {
     <Wrapper>
       <BitSegment
         name="Sign"
-        value={"x"}
+        value={props.sign[0] ? "-" : "+"}
         decimal={parseInt(Flop.stringifyBits(props.sign), 2).toFixed()}
         bits={props.sign}
         updateBits={(bits: boolean[]) =>
@@ -36,7 +38,7 @@ const BitPanel: FC<BitPanelProps> = (props: BitPanelProps): ReactElement => {
       />
       <BitSegment
         name="Exponent"
-        value={"x"}
+        value={"2^" + props.exponentValue}
         decimal={parseInt(Flop.stringifyBits(props.exponent), 2).toFixed()}
         bits={props.exponent}
         updateBits={(bits: boolean[]) =>
@@ -45,7 +47,7 @@ const BitPanel: FC<BitPanelProps> = (props: BitPanelProps): ReactElement => {
       />
       <BitSegment
         name="Mantissa/Significand"
-        value={"x"}
+        value={props.significandValue}
         decimal={parseInt(Flop.stringifyBits(props.significand), 2).toFixed()}
         bits={props.significand}
         updateBits={(bits: boolean[]) =>
