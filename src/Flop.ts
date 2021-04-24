@@ -277,7 +277,7 @@ export const convertFlopToFlop754 = (
     fractional,
     significandWidth
   ));
-  const significand = integer.plus(fractional);
+  let significand = integer.plus(fractional);
 
   // set type
   let type: Flop754Type = Flop754Type.NORMAL;
@@ -286,6 +286,8 @@ export const convertFlopToFlop754 = (
   }
   if (exponent > maxExponentRange) {
     type = sign ? Flop754Type.NEGATIVE_INFINITY : Flop754Type.POSITIVE_INFINITY;
+    exponent = maxExponentRange + 1;
+    significand = one;
   }
 
   // TODO: Is this necessary?
