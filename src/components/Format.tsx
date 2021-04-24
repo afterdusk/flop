@@ -49,6 +49,12 @@ const Format: FC<FormatProps> = (props: FormatProps): ReactElement => {
     setError(flop ? Flop.calculateError(flop, storedFlop) : null);
   }, [flop, storedFlop]);
 
+  const { sign, exponent, significand } = Flop.deconstructFlop754(
+    flop754,
+    props.exponentWidth,
+    props.significandWidth
+  );
+
   return (
     <Wrapper>
       <Title>{props.name}</Title>
@@ -56,9 +62,21 @@ const Format: FC<FormatProps> = (props: FormatProps): ReactElement => {
         clearInput={flop === null}
         stored={Flop.stringifyFlop(storedFlop)}
         error={error ? Flop.stringifyFlop(error) : ""}
-        updateValue={onFlopUpdate}
+        updateValue={(inputValue: string) =>
+          onFlopUpdate(Flop.generateFlop(inputValue))
+        }
       />
-      <BitPanel {...props} value={flop754} updateValue={onFlop754Update} />
+      <BitPanel
+        {...props}
+        sign={sign}
+        exponent={exponent}
+        significand={significand}
+        updateValue={(
+          sign: boolean[],
+          exponent: boolean[],
+          significand: boolean[]
+        ) => onFlop754Update(Flop.generateFlop754(sign, exponent, significand))}
+      />
     </Wrapper>
   );
 };

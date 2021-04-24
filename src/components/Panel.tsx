@@ -1,6 +1,5 @@
 import React, { FC, useState, ReactElement, useEffect } from "react";
 import styled from "styled-components";
-import * as Flop from "../Flop";
 
 const Wrapper = styled.div`
   box-sizing: border-box;
@@ -33,7 +32,7 @@ type PanelProps = {
   clearInput: boolean;
   stored: string;
   error: string;
-  updateValue: (value: Flop.Flop) => void;
+  updateValue: (inputValue: string) => void;
 };
 
 const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
@@ -46,8 +45,9 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
   }, [props.clearInput]);
 
   const onDecimalInput = (input: string) => {
+    // TODO: Add input validation
     setDecimal(input);
-    props.updateValue(Flop.generateFlop(input));
+    props.updateValue(input);
   };
 
   return (

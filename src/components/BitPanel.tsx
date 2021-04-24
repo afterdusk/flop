@@ -12,46 +12,44 @@ const Wrapper = styled.div`
 
 type BitPanelProps = {
   name: string;
-  exponentWidth: number;
-  significandWidth: number;
-  value: Flop.Flop754;
-  updateValue: (value: Flop.Flop754) => void;
+  sign: boolean[];
+  exponent: boolean[];
+  significand: boolean[];
+  updateValue: (
+    signBits: boolean[],
+    exponentBits: boolean[],
+    significandBits: boolean[]
+  ) => void;
 };
 
 const BitPanel: FC<BitPanelProps> = (props: BitPanelProps): ReactElement => {
-  const { sign, exponent, significand } = Flop.deconstructFlop754(
-    props.value,
-    props.exponentWidth,
-    props.significandWidth
-  );
-
   return (
     <Wrapper>
       <BitSegment
         name="Sign"
         value={"x"}
-        decimal={parseInt(Flop.stringifyBits(sign), 2)}
-        bits={sign}
+        decimal={parseInt(Flop.stringifyBits(props.sign), 2).toFixed()}
+        bits={props.sign}
         updateBits={(bits: boolean[]) =>
-          props.updateValue(Flop.generateFlop754(bits, exponent, significand))
+          props.updateValue(bits, props.exponent, props.significand)
         }
       />
       <BitSegment
         name="Exponent"
         value={"x"}
-        decimal={parseInt(Flop.stringifyBits(exponent), 2)}
-        bits={exponent}
+        decimal={parseInt(Flop.stringifyBits(props.exponent), 2).toFixed()}
+        bits={props.exponent}
         updateBits={(bits: boolean[]) =>
-          props.updateValue(Flop.generateFlop754(sign, bits, significand))
+          props.updateValue(props.sign, bits, props.significand)
         }
       />
       <BitSegment
         name="Mantissa/Significand"
         value={"x"}
-        decimal={parseInt(Flop.stringifyBits(significand), 2)}
-        bits={significand}
+        decimal={parseInt(Flop.stringifyBits(props.significand), 2).toFixed()}
+        bits={props.significand}
         updateBits={(bits: boolean[]) =>
-          props.updateValue(Flop.generateFlop754(sign, exponent, bits))
+          props.updateValue(props.sign, props.exponent, bits)
         }
       />
     </Wrapper>

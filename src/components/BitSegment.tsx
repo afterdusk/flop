@@ -35,7 +35,7 @@ const BitField = styled.div`
 type SegmentProps = {
   name: string;
   value: string;
-  decimal: number;
+  decimal: string;
   bits: boolean[];
   updateBits: (bits: boolean[]) => void;
 };
@@ -44,7 +44,7 @@ const BitSegment: FC<SegmentProps> = (props: SegmentProps): ReactElement => (
   <Wrapper>
     <Title>{props.name}</Title>
     <Field>{props.value}</Field>
-    <Field>{props.decimal.toFixed()}</Field>
+    <Field>{props.decimal}</Field>
     <BitField>
       {[...props.bits].map((e, i) => (
         <input
