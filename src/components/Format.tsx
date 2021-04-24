@@ -62,6 +62,12 @@ const Format: FC<FormatProps> = (props: FormatProps): ReactElement => {
         clearInput={flop === null}
         stored={Flop.stringifyFlop(storedFlop)}
         error={error ? Flop.stringifyFlop(error) : ""}
+        binaryRepresentation={Flop.stringifyBits(
+          [sign, exponent, significand].flat(1)
+        )}
+        hexRepresentation={Flop.stringifyBitsToHex(
+          [sign, exponent, significand].flat(1)
+        )}
         updateValue={(inputValue: string) =>
           onFlopUpdate(Flop.generateFlop(inputValue))
         }

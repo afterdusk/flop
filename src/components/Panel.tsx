@@ -1,5 +1,6 @@
 import React, { FC, useState, ReactElement, useEffect } from "react";
 import styled from "styled-components";
+import * as Constants from "../Constants";
 
 const Wrapper = styled.div`
   box-sizing: border-box;
@@ -32,6 +33,8 @@ type PanelProps = {
   clearInput: boolean;
   stored: string;
   error: string;
+  binaryRepresentation: string;
+  hexRepresentation: string;
   updateValue: (inputValue: string) => void;
 };
 
@@ -81,6 +84,25 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
         </Col>
         <Col size={5}>
           <InputField disabled readOnly value={props.error} />
+        </Col>
+      </Row>
+      {/* Binary Representation */}
+      <Row>
+        <Col size={2}>
+          <FieldName>Binary Representation</FieldName>
+        </Col>
+        <Col size={5}>
+          <InputField disabled readOnly value={props.binaryRepresentation} />
+        </Col>
+      </Row>
+      {/* Hexadecimal Representation */}
+      <Row>
+        <Col size={2}>
+          <FieldName>Hex Representation</FieldName>
+        </Col>
+        <Col size={5}>
+          {Constants.HEX_PREFIX_STRING}
+          <InputField disabled readOnly value={props.hexRepresentation} />
         </Col>
       </Row>
     </Wrapper>

@@ -333,6 +333,20 @@ export const stringifyBits = (bits: boolean[]): string => {
 };
 
 /**
+ * Converts bit array to hexadecimal string.
+ * @param bits boolean array representing bits (length should be in multiple of 4)
+ * @returns hexadecimal string
+ */
+export const stringifyBitsToHex = (bits: boolean[]): string => {
+  return Array.from(Array(Math.floor(bits.length / 4)).keys())
+    .map((i) => i * 4)
+    .map((i) => bits.slice(i, i + 4))
+    .map((e) => stringifyBits(e))
+    .map((e) => parseInt(e, 2).toString(16))
+    .join("");
+};
+
+/**
  * Converts binary string to bit array.
  * @param bitString binary string
  * @returns boolean array representing bits

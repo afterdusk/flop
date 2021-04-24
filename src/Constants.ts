@@ -6,6 +6,7 @@ export const APP_TITLE = "IEEE 754-Style Floating-Point Converter";
 export const POSITIVE_INFINITY_STRING = "infinity";
 export const NEGATIVE_INFINITY_STRING = "-infinity";
 export const NAN_STRING = "NaN";
+export const HEX_PREFIX_STRING = "0x";
 
 // bignumber.js
 export const BIGNUMBER_DECIMAL_PLACES = 300;
