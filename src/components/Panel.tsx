@@ -58,10 +58,11 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
     setHexRep(Flop.stringifyBitsToHex(props.bits));
   }, [props.bits]);
 
-  const onDecimalInput = (input: string) => {
-    // TODO: Add input validation
+  const onDecimalInput = (input: string, valid: boolean) => {
     setDecimalInput(input);
-    props.updateInputValue(input);
+    if (valid) {
+      props.updateInputValue(input);
+    }
   };
 
   const onBinaryInput = (input: string, valid: boolean) => {
@@ -88,8 +89,11 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
         <Col size={5}>
           <InputField
             type="text"
+            pattern={`^[+-]?\\d*(?:\\.\\d*(?:[eE][+-]?\\d+)?)?$`}
             value={decimalInput}
-            onChange={(e) => onDecimalInput(e.target.value)}
+            onChange={(e) =>
+              onDecimalInput(e.target.value, e.target.validity.valid)
+            }
           />
         </Col>
       </Row>
