@@ -429,8 +429,7 @@ export const roundHalfToEven = (
     fractionalBits.substring(significandWidth, significandWidth + 1) ?? "0";
   const R =
     fractionalBits.substring(significandWidth + 1, significandWidth + 2) ?? "0";
-  const S =
-    fractionalBits.substring(significandWidth + 2, significandWidth + 3) ?? "0";
+  const S = fractionalBits.length > significandWidth + 3 ? "1" : "0";
 
   if (G === "1") {
     // 111, 101, 110
@@ -438,11 +437,12 @@ export const roundHalfToEven = (
       return roundHalfUp(exponent, integer, fractional, significandWidth);
     }
 
-    // (1)100
     const LSB = fractionalBits.substring(
       significandWidth - 1,
       significandWidth
     );
+
+    // (1)100
     if (LSB === "1") {
       return roundHalfUp(exponent, integer, fractional, significandWidth);
     }
