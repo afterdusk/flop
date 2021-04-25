@@ -42,7 +42,7 @@ const Footer = styled.footer`
   font-size: 1rem;
 `;
 
-const VersionNumber = styled.p`
+const VersionNumber = styled.div`
   font-size: 1.4rem;
 `;
 
@@ -60,7 +60,7 @@ type TextWithLinkProps = {
   url: string;
 };
 
-const FooterTextWithLink: FC<TextWithLinkProps> = (
+const TextWithLink: FC<TextWithLinkProps> = (
   props: TextWithLinkProps
 ): ReactElement => (
   <Text>
@@ -86,16 +86,21 @@ const App: FC = (): ReactElement => {
       <Format {...Constants.TF32} />
       <Divider />
       <Footer>
-        <VersionNumber>{"Version " + Constants.VERSION_NUMBER}</VersionNumber>
-        <FooterTextWithLink
+        <VersionNumber>
+          <TextWithLink
+            {...Constants.BUILD_SOURCE_TEXT}
+            url={Constants.BUILD_SOURCE_URL}
+          />
+        </VersionNumber>
+        <TextWithLink
           {...Constants.UI_ACKNOWLEDGEMENT_TEXT}
           url={Constants.UI_ACKNOWLEDGEMENT_URL}
         />
-        <FooterTextWithLink
+        <TextWithLink
           {...Constants.BIGNUM_ACKNOWLEDGEMENT_TEXT}
           url={Constants.BIGNUM_ACKNOWLEDGEMENT_URL}
         />
-        <FooterTextWithLink
+        <TextWithLink
           {...Constants.ISSUES_CONTRIBUTION_TEXT}
           url={Constants.ISSUES_CONTRIBUTION_URL}
         />

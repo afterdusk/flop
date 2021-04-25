@@ -20,9 +20,10 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "env": "REACT_APP_VERSION=$npm_package_version REACT_APP_GIT_SHA=`git rev-parse --short HEAD`",
+    "start": "yarn run env react-scripts start",
+    "build": "yarn run env react-scripts build",
+    "test": "yarn run env react-scripts test",
     "eject": "react-scripts eject",
     "pretty": "prettier --write",
     "lint": "eslint --fix",

@@ -1,5 +1,4 @@
 // app
-export const VERSION_NUMBER = "0.0";
 export const APP_TITLE = "IEEE 754-Style Floating-Point Converter";
 export const POSITIVE_INFINITY_STRING = "infinity";
 export const NEGATIVE_INFINITY_STRING = "-infinity";
@@ -24,6 +23,12 @@ export const ISSUES_CONTRIBUTION_TEXT = {
   pre: "If you find any issues, please report them on the ",
   link: "GitHub repo",
   post: ". Contributions are also welcome 😊",
+};
+export const BUILD_SOURCE_URL = `https://github.com/afterdusk/flop/tree/${process.env.REACT_APP_GIT_SHA}`;
+export const BUILD_SOURCE_TEXT = {
+  pre: `Version ${process.env.REACT_APP_VERSION}, Build `,
+  link: `${process.env.REACT_APP_GIT_SHA}`,
+  post: "",
 };
 
 // styling
