@@ -64,14 +64,21 @@ const Format: FC<FormatProps> = (props: FormatProps): ReactElement => {
         clearInput={flop === null}
         stored={Flop.stringifyFlop(storedFlop)}
         error={error ? Flop.stringifyFlop(error) : ""}
-        binaryRepresentation={Flop.stringifyBits(
-          [sign, exponent, significand].flat(1)
-        )}
-        hexRepresentation={Flop.stringifyBitsToHex(
-          [sign, exponent, significand].flat(1)
-        )}
-        updateValue={(inputValue: string) =>
+        bits={[sign, exponent, significand].flat(1)}
+        updateInputValue={(inputValue: string) =>
           onFlopUpdate(Flop.generateFlop(inputValue))
+        }
+        updateValue={(bits: boolean[]) =>
+          onFlop754Update(
+            Flop.generateFlop754(
+              bits.slice(0, 1),
+              bits.slice(1, 1 + props.exponentWidth),
+              bits.slice(
+                1 + props.exponentWidth,
+                1 + props.exponentWidth + props.significandWidth
+              )
+            )
+          )
         }
       />
       <BitPanel

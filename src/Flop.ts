@@ -375,6 +375,20 @@ export const bitsFromString = (bitString: string): boolean[] => {
 };
 
 /**
+ * Converts hexadecimal string to bit array.
+ * @param hexString hexadecimal string
+ * @returns boolean array representing bits
+ */
+export const bitsFromHexString = (hexString: string): boolean[] => {
+  return hexString
+    .split("")
+    .map((e) => parseInt(e, 16).toString(2).padStart(4, "0"))
+    .map((e) => e.split(""))
+    .flat(1)
+    .map((e) => (e === "1" ? true : false));
+};
+
+/**
  * Gets the exponent range of a IEEE 754-style exponent segment.
  * @param width number of bits of exponent segment
  * @returns minimum and maximum exponents (of 2)

@@ -1,6 +1,7 @@
 import React, { FC, useState, ReactElement, useEffect } from "react";
 import styled from "styled-components";
 import * as Constants from "../Constants";
+import * as Flop from "../Flop";
 
 const Wrapper = styled.div`
   box-sizing: border-box;
@@ -27,30 +28,54 @@ const FieldName = styled.div`
 
 const InputField = styled.input`
   width: 100%;
+  &:invalid {
+    background-color: pink;
+  }
 `;
 
 type PanelProps = {
   clearInput: boolean;
   stored: string;
   error: string;
-  binaryRepresentation: string;
-  hexRepresentation: string;
-  updateValue: (inputValue: string) => void;
+  bits: boolean[];
+  updateInputValue: (inputValue: string) => void;
+  updateValue: (bits: boolean[]) => void;
 };
 
 const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
-  const [decimal, setDecimal] = useState("");
+  const [decimalInput, setDecimalInput] = useState("");
+  const [binaryRep, setBinaryRep] = useState(Flop.stringifyBits(props.bits));
+  const [hexRep, setHexRep] = useState(Flop.stringifyBitsToHex(props.bits));
 
   useEffect(() => {
     if (props.clearInput) {
-      setDecimal("");
+      setDecimalInput("");
     }
   }, [props.clearInput]);
 
+  useEffect(() => {
+    setBinaryRep(Flop.stringifyBits(props.bits));
+    setHexRep(Flop.stringifyBitsToHex(props.bits));
+  }, [props.bits]);
+
   const onDecimalInput = (input: string) => {
     // TODO: Add input validation
-    setDecimal(input);
-    props.updateValue(input);
+    setDecimalInput(input);
+    props.updateInputValue(input);
+  };
+
+  const onBinaryInput = (input: string, valid: boolean) => {
+    setBinaryRep(input);
+    if (valid) {
+      props.updateValue(Flop.bitsFromString(input));
+    }
+  };
+
+  const onHexInput = (input: string, valid: boolean) => {
+    setHexRep(input);
+    if (valid) {
+      props.updateValue(Flop.bitsFromHexString(input));
+    }
   };
 
   return (
@@ -63,7 +88,7 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
         <Col size={5}>
           <InputField
             type="text"
-            value={decimal}
+            value={decimalInput}
             onChange={(e) => onDecimalInput(e.target.value)}
           />
         </Col>
@@ -92,7 +117,13 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
           <FieldName>Binary Representation</FieldName>
         </Col>
         <Col size={5}>
-          <InputField disabled readOnly value={props.binaryRepresentation} />
+          <InputField
+            pattern={`^[01]{${props.bits.length}}$`}
+            value={binaryRep}
+            onChange={(e) =>
+              onBinaryInput(e.target.value, e.target.validity.valid)
+            }
+          />
         </Col>
       </Row>
       {/* Hexadecimal Representation */}
@@ -102,7 +133,13 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
         </Col>
         <Col size={5}>
           {Constants.HEX_PREFIX_STRING}
-          <InputField disabled readOnly value={props.hexRepresentation} />
+          <InputField
+            pattern={`^[a-fA-F0-9]{${Math.floor(props.bits.length / 4)}}$`}
+            value={hexRep}
+            onChange={(e) =>
+              onHexInput(e.target.value, e.target.validity.valid)
+            }
+          />
         </Col>
       </Row>
     </Wrapper>

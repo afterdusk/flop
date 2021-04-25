@@ -18,9 +18,9 @@ type BitPanelProps = {
   significand: boolean[];
   significandValue: string;
   updateValue: (
-    signBits: boolean[],
-    exponentBits: boolean[],
-    significandBits: boolean[]
+    sign: boolean[],
+    exponent: boolean[],
+    significand: boolean[]
   ) => void;
 };
 
