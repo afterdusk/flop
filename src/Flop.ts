@@ -137,6 +137,14 @@ export const getSignificand = (flop754: Flop754): string => {
 };
 
 /**
+ * @param flop754 object to test subnormal status
+ * @returns true if value is subnormal
+ */
+export const isSubnormal = (flop754: Flop754): boolean => {
+  return flop754.type === Flop754Type.SUBNORMAL;
+};
+
+/**
  * Deconstructs a Flop754 object into constituent boolean objects representing bits.
  * @param flop754 Flop754 object to be deconstructed
  * @param exponentWidth bit width of exponent segment

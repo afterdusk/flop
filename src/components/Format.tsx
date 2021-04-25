@@ -87,7 +87,10 @@ const Format: FC<FormatProps> = (props: FormatProps): ReactElement => {
         exponent={exponent}
         exponentValue={Flop.getExponent(flop754)}
         significand={significand}
-        significandValue={Flop.getSignificand(flop754)}
+        significandValue={
+          (Flop.isSubnormal(flop754) ? "(subnormal) " : "") +
+          Flop.getSignificand(flop754)
+        }
         updateValue={(
           sign: boolean[],
           exponent: boolean[],
