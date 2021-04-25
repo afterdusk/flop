@@ -45,12 +45,10 @@ const App: FC = (): ReactElement => (
       <Title>{Constants.APP_TITLE}</Title>
     </Header>
     <Format {...Constants.FP32} />
-    {/*
     <Format {...Constants.FP64} />
     <Format {...Constants.FP16} />
     <Format {...Constants.BF16} />
     <Format {...Constants.TF32} />
-    */}
   </Wrapper>
 );
 

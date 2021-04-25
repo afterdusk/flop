@@ -9,7 +9,7 @@ export const NAN_STRING = "NaN";
 export const HEX_PREFIX_STRING = "0x";
 
 // bignumber.js
-export const BIGNUMBER_DECIMAL_PLACES = 300;
+export const BIGNUMBER_DECIMAL_PLACES = 3000;
 
 // formats
 export const FP64 = {
