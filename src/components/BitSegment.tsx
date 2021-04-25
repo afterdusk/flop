@@ -32,6 +32,8 @@ const BitField = styled.div`
   flex-direction: row;
 `;
 
+const BitCheckbox = styled.input``;
+
 type SegmentProps = {
   name: string;
   value: string;
@@ -47,7 +49,7 @@ const BitSegment: FC<SegmentProps> = (props: SegmentProps): ReactElement => (
     <Field>{props.decimal}</Field>
     <BitField>
       {[...props.bits].map((e, i) => (
-        <input
+        <BitCheckbox
           key={i}
           type="checkbox"
           checked={e}

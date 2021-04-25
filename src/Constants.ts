@@ -27,7 +27,7 @@ export const ISSUES_CONTRIBUTION_TEXT = {
 };
 
 // styling
-export const BACKGROUND_COLOR = "#282c34";
+export const BACKGROUND_COLOR = "#0e171c";
 export const ACCENT_COLOR = "#039cfd";
 
 // bignumber.js
