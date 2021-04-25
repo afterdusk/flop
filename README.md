@@ -1,7 +1,7 @@
 # flop
 ![main-branch](https://github.com/afterdusk/flop/actions/workflows/main.yml/badge.svg?branch=main)
 
-IEEE 754-style floating point converter
+IEEE 754-style floating-point converter
 
 ## Available Scripts
 

@@ -2,7 +2,6 @@ import React, { FC, ReactElement } from "react";
 import styled from "styled-components";
 import Format from "./components/Format";
 import * as Constants from "./Constants";
-import { Helmet } from "react-helmet";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -37,10 +36,6 @@ const Title = styled.h1`
 
 const App: FC = (): ReactElement => (
   <Wrapper>
-    <Helmet>
-      {/* Block indexing for now. Remove react-helmet when site goes live. */}
-      <meta name="robots" content="noindex" />
-    </Helmet>
     <Header>
       <Title>{Constants.APP_TITLE}</Title>
     </Header>
