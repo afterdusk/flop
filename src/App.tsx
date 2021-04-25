@@ -1,6 +1,7 @@
 import React, { FC, ReactElement } from "react";
 import styled from "styled-components";
 import Format from "./components/Format";
+import BigNumber from "bignumber.js";
 import * as Constants from "./Constants";
 
 const Wrapper = styled.div`
@@ -8,7 +9,7 @@ const Wrapper = styled.div`
   height: 100%;
   min-height: 100%;
   box-sizing: border-box;
-  padding: 8rem 6rem; // top-bottom left-right
+  padding: 6rem; // top-bottom left-right
 
   display: flex;
   flex-direction: column;
@@ -26,25 +27,81 @@ const Wrapper = styled.div`
   -moz-osx-font-smoothing: grayscale;
 `;
 
-const Header = styled.header`
-  padding: 2rem;
-`;
+const Header = styled.header``;
 
 const Title = styled.h1`
   font-size: 2.4rem;
 `;
 
-const App: FC = (): ReactElement => (
-  <Wrapper>
-    <Header>
-      <Title>{Constants.APP_TITLE}</Title>
-    </Header>
-    <Format {...Constants.FP32} />
-    <Format {...Constants.FP64} />
-    <Format {...Constants.FP16} />
-    <Format {...Constants.BF16} />
-    <Format {...Constants.TF32} />
-  </Wrapper>
+const Divider = styled.hr`
+  width: 100%;
+`;
+
+const Footer = styled.footer`
+  padding: 1rem;
+  font-size: 1rem;
+`;
+
+const VersionNumber = styled.p`
+  font-size: 1.4rem;
+`;
+
+const Text = styled.p``;
+
+const Link = styled.a`
+  color: ${Constants.ACCENT_COLOR};
+  text-decoration: none;
+`;
+
+type TextWithLinkProps = {
+  pre: string;
+  link: string;
+  post: string;
+  url: string;
+};
+
+const FooterTextWithLink: FC<TextWithLinkProps> = (
+  props: TextWithLinkProps
+): ReactElement => (
+  <Text>
+    {props.pre}
+    <Link href={props.url}>{props.link}</Link>
+    {props.post}
+  </Text>
 );
+
+const App: FC = (): ReactElement => {
+  // configure bignumber.js library
+  BigNumber.set({ DECIMAL_PLACES: Constants.BIGNUMBER_DECIMAL_PLACES });
+
+  return (
+    <Wrapper>
+      <Header>
+        <Title>{Constants.APP_TITLE}</Title>
+      </Header>
+      <Format {...Constants.FP32} />
+      <Format {...Constants.FP64} />
+      <Format {...Constants.FP16} />
+      <Format {...Constants.BF16} />
+      <Format {...Constants.TF32} />
+      <Divider />
+      <Footer>
+        <VersionNumber>{"Version " + Constants.VERSION_NUMBER}</VersionNumber>
+        <FooterTextWithLink
+          {...Constants.UI_ACKNOWLEDGEMENT_TEXT}
+          url={Constants.UI_ACKNOWLEDGEMENT_URL}
+        />
+        <FooterTextWithLink
+          {...Constants.BIGNUM_ACKNOWLEDGEMENT_TEXT}
+          url={Constants.BIGNUM_ACKNOWLEDGEMENT_URL}
+        />
+        <FooterTextWithLink
+          {...Constants.ISSUES_CONTRIBUTION_TEXT}
+          url={Constants.ISSUES_CONTRIBUTION_URL}
+        />
+      </Footer>
+    </Wrapper>
+  );
+};
 
 export default App;

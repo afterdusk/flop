@@ -15,7 +15,6 @@ export interface Flop {
  */
 export enum FlopType {
   NORMAL,
-  // TODO: Merge the infinity states?
   POSITIVE_INFINITY,
   NEGATIVE_INFINITY,
   NAN,
@@ -77,9 +76,6 @@ export const generateFlop754 = (
   exponent: boolean[],
   significand: boolean[]
 ): Flop754 => {
-  // TODO: Set this globally
-  BigNumber.set({ DECIMAL_PLACES: Constants.BIGNUMBER_DECIMAL_PLACES });
-
   const type = exponent.some((e) => e)
     ? exponent.every((e) => e)
       ? significand.every((e) => !e)
@@ -203,9 +199,6 @@ export const deconstructFlop754 = (
  * @returns resulting Flop object
  */
 export const convertFlop754ToFlop = (flop754: Flop754): Flop => {
-  // TODO: Set this globally
-  BigNumber.set({ DECIMAL_PLACES: Constants.BIGNUMBER_DECIMAL_PLACES });
-
   const type = (() => {
     switch (flop754.type) {
       case Flop754Type.POSITIVE_INFINITY:
@@ -239,9 +232,6 @@ export const convertFlopToFlop754 = (
   exponentWidth: number,
   significandWidth: number
 ): Flop754 => {
-  // TODO: Set this globally
-  BigNumber.set({ DECIMAL_PLACES: Constants.BIGNUMBER_DECIMAL_PLACES });
-
   // extract sign
   const sign = flop.value.isNegative();
 

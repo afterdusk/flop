@@ -1,12 +1,34 @@
-// styling
-export const BACKGROUND_COLOR = "#282c34";
-
 // app
+export const VERSION_NUMBER = "0.0";
 export const APP_TITLE = "IEEE 754-Style Floating-Point Converter";
 export const POSITIVE_INFINITY_STRING = "infinity";
 export const NEGATIVE_INFINITY_STRING = "-infinity";
 export const NAN_STRING = "NaN";
 export const HEX_PREFIX_STRING = "0x";
+export const UI_ACKNOWLEDGEMENT_URL =
+  "https://www.h-schmidt.net/FloatConverter/IEEE754.html";
+export const UI_ACKNOWLEDGEMENT_TEXT = {
+  pre: "Converter UI from ",
+  link: "h-schmidt's floating-point converter",
+  post: ".",
+};
+export const BIGNUM_ACKNOWLEDGEMENT_URL =
+  "https://mikemcl.github.io/bignumber.js/";
+export const BIGNUM_ACKNOWLEDGEMENT_TEXT = {
+  pre: "Conversion routines powered by the ",
+  link: "bignumber.js",
+  post: " library.",
+};
+export const ISSUES_CONTRIBUTION_URL = "https://github.com/afterdusk/flop";
+export const ISSUES_CONTRIBUTION_TEXT = {
+  pre: "If you find any issues, please report them on the ",
+  link: "GitHub repo",
+  post: ". Contributions are also welcome 😊",
+};
+
+// styling
+export const BACKGROUND_COLOR = "#282c34";
+export const ACCENT_COLOR = "#039cfd";
 
 // bignumber.js
 export const BIGNUMBER_DECIMAL_PLACES = 3000;
