@@ -89,7 +89,7 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
         <Col size={5}>
           <InputField
             type="text"
-            pattern={`^[+-]?\\d*(?:\\.\\d*(?:[eE][+-]?\\d+)?)?$`}
+            pattern={`^[+-]?\\d*(?:\\.?\\d*(?:[eE][+-]?\\d+)?)?$`}
             value={decimalInput}
             onChange={(e) =>
               onDecimalInput(e.target.value, e.target.validity.valid)
