@@ -4,6 +4,7 @@ import styled from "styled-components";
 import * as Flop from "../Flop";
 
 const Wrapper = styled.div`
+  min-width: 36rem; // TODO: Handle this more elegantly
   padding: 1rem 0;
 
   display: flex;

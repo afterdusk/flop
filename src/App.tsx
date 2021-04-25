@@ -7,6 +7,7 @@ import * as Constants from "./Constants";
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
+  min-width: 50rem; // TODO: Handle this more elegantly
   min-height: 100%;
   box-sizing: border-box;
   padding: 6rem; // top-bottom left-right

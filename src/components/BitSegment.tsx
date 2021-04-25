@@ -4,6 +4,7 @@ import styled from "styled-components";
 const Wrapper = styled.div`
   box-sizing: border-box;
   padding: 0.2rem;
+  margin: 0 auto;
 
   display: flex;
   flex-direction: column;
