@@ -4,13 +4,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^13.1.3",
-    "@types/jest": "^26.0.15",
-    "@types/node": "^14.14.40",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
     "bignumber.js": "^9.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -19,22 +12,37 @@
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
   },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.12.0",
+    "@testing-library/react": "^11.2.6",
+    "@testing-library/user-event": "^13.1.5",
+    "@types/jest": "^26.0.23",
+    "@types/node": "^14.14.41",
+    "@types/react": "^17.0.4",
+    "@types/react-dom": "^17.0.3",
+    "@types/styled-components": "^5.1.9",
+    "@typescript-eslint/eslint-plugin": "^4.20.0",
+    "@typescript-eslint/parser": "^4.20.0",
+    "eslint": "^7.23.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-react": "^7.23.1",
+    "gh-pages": "^3.1.0",
+    "lint-staged": ">=10",
+    "prettier": "2.2.1",
+    "simple-git-hooks": ">=2.0.3"
+  },
   "scripts": {
     "env": "REACT_APP_VERSION=$npm_package_version REACT_APP_GIT_SHA=`git rev-parse --short HEAD`",
     "start": "yarn run env react-scripts start",
     "build": "yarn run env react-scripts build",
-    "test": "yarn run env react-scripts test",
+    "test": "yarn run env react-scripts test --coverage",
     "eject": "react-scripts eject",
     "pretty": "prettier --write",
     "lint": "eslint --fix",
+    "pretty-check": "prettier --check",
+    "lint-check": "eslint",
     "predeploy": "yarn run build",
     "deploy": "gh-pages -d build"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
@@ -48,18 +56,37 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "@types/react-helmet": "^6.1.0",
-    "@types/styled-components": "^5.1.9",
-    "@typescript-eslint/eslint-plugin": "^4.20.0",
-    "@typescript-eslint/parser": "^4.20.0",
-    "eslint": "^7.23.0",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-react": "^7.23.1",
-    "gh-pages": "^3.1.0",
-    "lint-staged": ">=10",
-    "prettier": "2.2.1",
-    "simple-git-hooks": ">=2.0.3"
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "node": true
+    },
+    "extends": [
+      "react-app",
+      "react-app/jest",
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:@typescript-eslint/recommended",
+      "prettier"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": 12,
+      "sourceType": "module"
+    },
+    "plugins": [
+      "react",
+      "@typescript-eslint"
+    ],
+    "rules": {},
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    }
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
@@ -70,11 +97,11 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,css}": [
+    "*.{js,jsx,ts,tsx}": [
       "yarn lint",
       "yarn pretty"
     ],
-    "*.{md}": [
+    "*.{md,json,html,css,yml}": [
       "yarn pretty"
     ]
   }
