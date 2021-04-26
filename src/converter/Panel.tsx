@@ -1,7 +1,12 @@
 import React, { FC, useState, ReactElement, useEffect } from "react";
 import styled from "styled-components";
-import * as Constants from "../Constants";
-import * as Flop from "./Flop";
+import { HEX_PREFIX_STRING } from "../constants";
+import {
+  bitsFromHexString,
+  bitsFromString,
+  stringifyBits,
+  stringifyBitsToHex,
+} from "./flop";
 
 const Wrapper = styled.div`
   box-sizing: border-box;
@@ -44,8 +49,8 @@ interface PanelProps {
 
 const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
   const [decimalInput, setDecimalInput] = useState("");
-  const [binaryRep, setBinaryRep] = useState(Flop.stringifyBits(props.bits));
-  const [hexRep, setHexRep] = useState(Flop.stringifyBitsToHex(props.bits));
+  const [binaryRep, setBinaryRep] = useState(stringifyBits(props.bits));
+  const [hexRep, setHexRep] = useState(stringifyBitsToHex(props.bits));
 
   useEffect(() => {
     if (props.clearInput) {
@@ -54,8 +59,8 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
   }, [props.clearInput]);
 
   useEffect(() => {
-    setBinaryRep(Flop.stringifyBits(props.bits));
-    setHexRep(Flop.stringifyBitsToHex(props.bits));
+    setBinaryRep(stringifyBits(props.bits));
+    setHexRep(stringifyBitsToHex(props.bits));
   }, [props.bits]);
 
   const onDecimalInput = (input: string, valid: boolean) => {
@@ -68,14 +73,14 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
   const onBinaryInput = (input: string, valid: boolean) => {
     setBinaryRep(input);
     if (valid) {
-      props.updateValue(Flop.bitsFromString(input));
+      props.updateValue(bitsFromString(input));
     }
   };
 
   const onHexInput = (input: string, valid: boolean) => {
     setHexRep(input);
     if (valid) {
-      props.updateValue(Flop.bitsFromHexString(input));
+      props.updateValue(bitsFromHexString(input));
     }
   };
 
@@ -136,7 +141,7 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
           <FieldName>Hex Representation</FieldName>
         </Col>
         <Col size={5}>
-          {Constants.HEX_PREFIX_STRING}
+          {HEX_PREFIX_STRING}
           <InputField
             pattern={`^[a-fA-F0-9]{${Math.floor(props.bits.length / 4)}}$`}
             value={hexRep}

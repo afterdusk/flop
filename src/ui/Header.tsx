@@ -1,6 +1,6 @@
 import React, { FC, ReactElement } from "react";
 import styled from "styled-components";
-import * as Constants from "../Constants";
+import { APP_TITLE } from "../constants";
 
 const Wrapper = styled.header`
   padding: 1rem;
@@ -12,7 +12,7 @@ const Title = styled.h1`
 
 const Footer: FC = (): ReactElement => (
   <Wrapper>
-    <Title>{Constants.APP_TITLE}</Title>
+    <Title>{APP_TITLE}</Title>
   </Wrapper>
 );
 

@@ -1,5 +1,9 @@
 import BigNumber from "bignumber.js";
-import * as Constants from "../Constants";
+import {
+  NAN_STRING,
+  NEGATIVE_INFINITY_STRING,
+  POSITIVE_INFINITY_STRING,
+} from "../constants";
 
 /**
  * Represents a floating-point value.
@@ -330,11 +334,11 @@ export const calculateError = (accurate: Flop, stored: Flop): Flop => {
 export const stringifyFlop = (flop: Flop): string => {
   switch (flop.type) {
     case FlopType.POSITIVE_INFINITY:
-      return Constants.POSITIVE_INFINITY_STRING;
+      return POSITIVE_INFINITY_STRING;
     case FlopType.NEGATIVE_INFINITY:
-      return Constants.NEGATIVE_INFINITY_STRING;
+      return NEGATIVE_INFINITY_STRING;
     case FlopType.NAN:
-      return Constants.NAN_STRING;
+      return NAN_STRING;
     case FlopType.NORMAL:
       return flop.value.toFixed();
   }

@@ -1,11 +1,11 @@
 import React, { FC, ReactElement } from "react";
 import styled from "styled-components";
-import * as Constants from "../Constants";
+import { ACCENT_COLOR } from "../constants";
 
 const Text = styled.p``;
 
 const Link = styled.a`
-  color: ${Constants.ACCENT_COLOR};
+  color: ${ACCENT_COLOR};
   text-decoration: none;
 `;
 

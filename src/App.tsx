@@ -2,7 +2,15 @@ import React, { FC, ReactElement } from "react";
 import styled from "styled-components";
 import FormatConverter from "./converter/FormatConverter";
 import BigNumber from "bignumber.js";
-import * as Constants from "./Constants";
+import {
+  BACKGROUND_COLOR,
+  BF16,
+  BIGNUMBER_DECIMAL_PLACES,
+  FP16,
+  FP32,
+  FP64,
+  TF32,
+} from "./constants";
 import Header from "./ui/Header";
 import Footer from "./ui/Footer";
 
@@ -20,7 +28,7 @@ const Wrapper = styled.div`
   justify-content: start;
   overflow: auto;
 
-  background-color: ${Constants.BACKGROUND_COLOR};
+  background-color: ${BACKGROUND_COLOR};
   text-align: center;
   color: white;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -36,16 +44,16 @@ const Divider = styled.hr`
 
 const App: FC = (): ReactElement => {
   // configure bignumber.js library
-  BigNumber.set({ DECIMAL_PLACES: Constants.BIGNUMBER_DECIMAL_PLACES });
+  BigNumber.set({ DECIMAL_PLACES: BIGNUMBER_DECIMAL_PLACES });
 
   return (
     <Wrapper>
       <Header />
-      <FormatConverter {...Constants.FP32} />
-      <FormatConverter {...Constants.FP64} />
-      <FormatConverter {...Constants.FP16} />
-      <FormatConverter {...Constants.BF16} />
-      <FormatConverter {...Constants.TF32} />
+      <FormatConverter {...FP32} />
+      <FormatConverter {...FP64} />
+      <FormatConverter {...FP16} />
+      <FormatConverter {...BF16} />
+      <FormatConverter {...TF32} />
       <Divider />
       <Footer />
     </Wrapper>
