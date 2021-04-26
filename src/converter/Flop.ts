@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import * as Constants from "./Constants";
+import * as Constants from "../Constants";
 
 /**
  * Represents a floating-point value.

@@ -11,8 +11,9 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.h4`
-  font-size: 1.4rem;
   margin: 0;
+
+  font-size: 1.4rem;
 `;
 
 const Field = styled.p`
@@ -35,13 +36,13 @@ const BitField = styled.div`
 
 const BitCheckbox = styled.input``;
 
-type SegmentProps = {
+interface SegmentProps {
   name: string;
   value: string;
   decimal: string;
   bits: boolean[];
   updateBits: (bits: boolean[]) => void;
-};
+}
 
 const BitSegment: FC<SegmentProps> = (props: SegmentProps): ReactElement => (
   <Wrapper>

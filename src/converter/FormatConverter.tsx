@@ -2,7 +2,7 @@ import React, { FC, ReactElement, useEffect, useState } from "react";
 import Panel from "./Panel";
 import BitPanel from "./BitPanel";
 import styled from "styled-components";
-import * as Flop from "../Flop";
+import * as Flop from "./Flop";
 
 const Wrapper = styled.div`
   max-width: 100%;
@@ -16,13 +16,15 @@ const Title = styled.h2`
   font-size: 1.8rem;
 `;
 
-type FormatProps = {
+interface FormatConverterProps {
   name: string;
   exponentWidth: number;
   significandWidth: number;
-};
+}
 
-const Format: FC<FormatProps> = (props: FormatProps): ReactElement => {
+const FormatConverter: FC<FormatConverterProps> = (
+  props: FormatConverterProps
+): ReactElement => {
   const [flop, setFlop] = useState<null | Flop.Flop>(null);
   const [flop754, setFlop754] = useState(
     Flop.defaultFlop754(props.exponentWidth)
@@ -60,6 +62,22 @@ const Format: FC<FormatProps> = (props: FormatProps): ReactElement => {
   return (
     <Wrapper>
       <Title>{props.name}</Title>
+      <BitPanel
+        {...props}
+        sign={sign}
+        exponent={exponent}
+        exponentValue={Flop.getExponent(flop754)}
+        significand={significand}
+        significandValue={
+          (Flop.isSubnormal(flop754) ? "(subnormal) " : "") +
+          Flop.getSignificand(flop754)
+        }
+        updateValue={(
+          sign: boolean[],
+          exponent: boolean[],
+          significand: boolean[]
+        ) => onFlop754Update(Flop.generateFlop754(sign, exponent, significand))}
+      />
       <Panel
         clearInput={flop === null}
         stored={Flop.stringifyFlop(storedFlop)}
@@ -81,24 +99,8 @@ const Format: FC<FormatProps> = (props: FormatProps): ReactElement => {
           )
         }
       />
-      <BitPanel
-        {...props}
-        sign={sign}
-        exponent={exponent}
-        exponentValue={Flop.getExponent(flop754)}
-        significand={significand}
-        significandValue={
-          (Flop.isSubnormal(flop754) ? "(subnormal) " : "") +
-          Flop.getSignificand(flop754)
-        }
-        updateValue={(
-          sign: boolean[],
-          exponent: boolean[],
-          significand: boolean[]
-        ) => onFlop754Update(Flop.generateFlop754(sign, exponent, significand))}
-      />
     </Wrapper>
   );
 };
 
-export default Format;
+export default FormatConverter;

@@ -1,7 +1,7 @@
 import React, { FC, ReactElement } from "react";
 import BitSegment from "./BitSegment";
 import styled from "styled-components";
-import * as Flop from "../Flop";
+import * as Flop from "./Flop";
 
 const Wrapper = styled.div`
   min-width: 36rem; // TODO: Handle this more elegantly
@@ -11,7 +11,7 @@ const Wrapper = styled.div`
   overflow-x: auto;
 `;
 
-type BitPanelProps = {
+interface BitPanelProps {
   name: string;
   sign: boolean[];
   exponent: boolean[];
@@ -23,7 +23,7 @@ type BitPanelProps = {
     exponent: boolean[],
     significand: boolean[]
   ) => void;
-};
+}
 
 const BitPanel: FC<BitPanelProps> = (props: BitPanelProps): ReactElement => {
   return (

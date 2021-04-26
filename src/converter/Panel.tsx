@@ -1,7 +1,7 @@
 import React, { FC, useState, ReactElement, useEffect } from "react";
 import styled from "styled-components";
 import * as Constants from "../Constants";
-import * as Flop from "../Flop";
+import * as Flop from "./Flop";
 
 const Wrapper = styled.div`
   box-sizing: border-box;
@@ -33,14 +33,14 @@ const InputField = styled.input`
   }
 `;
 
-type PanelProps = {
+interface PanelProps {
   clearInput: boolean;
   stored: string;
   error: string;
   bits: boolean[];
   updateInputValue: (inputValue: string) => void;
   updateValue: (bits: boolean[]) => void;
-};
+}
 
 const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
   const [decimalInput, setDecimalInput] = useState("");
