@@ -1,7 +1,7 @@
+import BigNumber from "bignumber.js";
 import React, { FC, ReactElement } from "react";
 import styled from "styled-components";
-import FormatConverter from "./converter/FormatConverter";
-import BigNumber from "bignumber.js";
+
 import {
   BACKGROUND_COLOR,
   BF16,
@@ -11,8 +11,9 @@ import {
   FP64,
   TF32,
 } from "./constants";
-import Header from "./ui/Header";
+import FormatConverter from "./converter/FormatConverter";
 import Footer from "./ui/Footer";
+import Header from "./ui/Header";
 
 const Wrapper = styled.div`
   width: 100%;

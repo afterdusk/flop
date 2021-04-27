@@ -1,5 +1,6 @@
-import React, { FC, useState, ReactElement, useEffect } from "react";
+import React, { FC, ReactElement, useEffect, useState } from "react";
 import styled from "styled-components";
+
 import { HEX_PREFIX_STRING } from "../constants";
 import {
   bitsFromHexString,

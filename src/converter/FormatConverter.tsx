@@ -1,23 +1,24 @@
 import React, { FC, ReactElement, useEffect, useState } from "react";
-import Panel from "./Panel";
-import BitPanel from "./BitPanel";
 import styled from "styled-components";
+
+import BitPanel from "./BitPanel";
 import {
+  calculateError,
+  convertFlop754ToFlop,
+  convertFlopToFlop754,
+  deconstructFlop754,
   defaultFlop,
   defaultFlop754,
-  convertFlop754ToFlop,
   Flop,
   Flop754,
-  convertFlopToFlop754,
-  calculateError,
-  deconstructFlop754,
-  getExponent,
-  isSubnormal,
-  getSignificand,
-  generateFlop754,
-  stringifyFlop,
   generateFlop,
+  generateFlop754,
+  getExponent,
+  getSignificand,
+  isSubnormal,
+  stringifyFlop,
 } from "./flop";
+import Panel from "./Panel";
 
 const Wrapper = styled.div`
   max-width: 100%;

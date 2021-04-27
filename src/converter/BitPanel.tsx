@@ -1,6 +1,7 @@
 import React, { FC, ReactElement } from "react";
-import BitSegment from "./BitSegment";
 import styled from "styled-components";
+
+import BitSegment from "./BitSegment";
 import { stringifyBits } from "./flop";
 
 const Wrapper = styled.div`

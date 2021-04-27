@@ -1,4 +1,5 @@
 import BigNumber from "bignumber.js";
+
 import {
   NAN_STRING,
   NEGATIVE_INFINITY_STRING,

@@ -1,5 +1,6 @@
 import React, { FC, ReactElement } from "react";
 import styled from "styled-components";
+
 import { APP_TITLE } from "../constants";
 
 const Wrapper = styled.header`
