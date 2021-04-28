@@ -1,7 +1,9 @@
 import React, { FC, ReactElement, useEffect, useState } from "react";
 import styled from "styled-components";
 
+import { ROUNDING_MODE } from "../constants";
 import BitPanel from "./BitPanel";
+import ConfigPanel from "./ConfigPanel";
 import {
   calculateError,
   convertFlop754ToFlop,
@@ -45,6 +47,8 @@ const FormatConverter: FC<FormatConverterProps> = (
   const [flop754, setFlop754] = useState(defaultFlop754(props.exponentWidth));
   const [storedFlop, setStoredFlop] = useState(defaultFlop());
   const [error, setError] = useState<null | Flop>(null);
+  const [roundingMode, setRoundingMode] = useState(ROUNDING_MODE.halfToEven);
+  const [scientificNotation, setScientificNotation] = useState(false);
 
   const onFlop754Update = (value: Flop754) => {
     setFlop(null);
@@ -54,14 +58,28 @@ const FormatConverter: FC<FormatConverterProps> = (
 
   const onFlopUpdate = (value: Flop) => {
     setFlop(value);
-    const updated754Value = convertFlopToFlop754(
-      value,
-      props.exponentWidth,
-      props.significandWidth
-    );
-    setFlop754(updated754Value);
-    setStoredFlop(convertFlop754ToFlop(updated754Value));
   };
+
+  const onRoundingModeUpdate = (roundingMode: ROUNDING_MODE) => {
+    setRoundingMode(roundingMode);
+  };
+
+  const onNotationUpdate = (isScientific: boolean) => {
+    setScientificNotation(isScientific);
+  };
+
+  useEffect(() => {
+    if (flop !== null) {
+      const updated754Value = convertFlopToFlop754(
+        flop,
+        props.exponentWidth,
+        props.significandWidth,
+        roundingMode
+      );
+      setFlop754(updated754Value);
+      setStoredFlop(convertFlop754ToFlop(updated754Value));
+    }
+  }, [flop, roundingMode, props.exponentWidth, props.significandWidth]);
 
   useEffect(() => {
     setError(flop ? calculateError(flop, storedFlop) : null);
@@ -93,8 +111,8 @@ const FormatConverter: FC<FormatConverterProps> = (
       />
       <Panel
         clearInput={flop === null}
-        stored={stringifyFlop(storedFlop)}
-        error={error ? stringifyFlop(error) : ""}
+        stored={stringifyFlop(storedFlop, scientificNotation)}
+        error={error ? stringifyFlop(error, scientificNotation) : ""}
         bits={[sign, exponent, significand].flat(1)}
         updateInputValue={(inputValue: string) =>
           onFlopUpdate(generateFlop(inputValue))
@@ -111,6 +129,12 @@ const FormatConverter: FC<FormatConverterProps> = (
             )
           )
         }
+      />
+      <ConfigPanel
+        roundingMode={roundingMode}
+        scientificNotation={scientificNotation}
+        updateRoundingMode={onRoundingModeUpdate}
+        updateNotation={onNotationUpdate}
       />
     </Wrapper>
   );

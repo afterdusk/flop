@@ -20,7 +20,7 @@ export const BIGNUM_ACKNOWLEDGEMENT_TEXT = {
 };
 export const ISSUES_CONTRIBUTION_URL = "https://github.com/afterdusk/flop";
 export const ISSUES_CONTRIBUTION_TEXT = {
-  pre: "If you find any issues, please report them on the ",
+  pre: "Please report any issues on the ",
   link: "GitHub repo",
   post: ". Contributions are also welcome 😊",
 };
@@ -37,6 +37,12 @@ export const ACCENT_COLOR = "#039cfd";
 
 // bignumber.js
 export const BIGNUMBER_DECIMAL_PLACES = 3000;
+
+// rounding
+export enum ROUNDING_MODE {
+  halfToEven,
+  towardZero,
+}
 
 // formats
 export const FP64 = {

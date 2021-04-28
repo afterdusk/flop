@@ -4,6 +4,7 @@ import {
   NAN_STRING,
   NEGATIVE_INFINITY_STRING,
   POSITIVE_INFINITY_STRING,
+  ROUNDING_MODE,
 } from "../constants";
 
 /**
@@ -229,13 +230,15 @@ export const convertFlop754ToFlop = (flop754: Flop754): Flop => {
  * @param flop object to be converted
  * @param exponentWidth exponent bit size of target IEEE 754 type
  * @param significandWidth significand bit size of target IEEE 754 type
+ * @param roundingMode rounding mode to use (default halfToEven)
  * @returns resulting Flop754 object
  */
 // TODO: Cleanup and optimize
 export const convertFlopToFlop754 = (
   flop: Flop,
   exponentWidth: number,
-  significandWidth: number
+  significandWidth: number,
+  roundingMode = ROUNDING_MODE.halfToEven
 ): Flop754 => {
   // extract sign
   const sign = flop.value.isNegative();
@@ -274,12 +277,25 @@ export const convertFlopToFlop754 = (
   }
 
   // TODO: Fix this abomination
-  ({ exponent, integer, fractional } = roundHalfToEven(
-    exponent,
-    integer,
-    fractional,
-    significandWidth
-  ));
+  switch (roundingMode) {
+    case ROUNDING_MODE.halfToEven:
+      ({ exponent, integer, fractional } = roundHalfToEven(
+        exponent,
+        integer,
+        fractional,
+        significandWidth
+      ));
+      break;
+    case ROUNDING_MODE.towardZero:
+      ({ exponent, integer, fractional } = roundTowardZero(
+        exponent,
+        integer,
+        fractional,
+        significandWidth
+      ));
+      break;
+  }
+
   let significand = integer.plus(fractional);
 
   // set type
@@ -330,9 +346,10 @@ export const calculateError = (accurate: Flop, stored: Flop): Flop => {
 /**
  * Converts Flop object to decimal string.
  * @param flop object to convert
+ * @param scientific use scientific notation (default false)
  * @returns decimal string
  */
-export const stringifyFlop = (flop: Flop): string => {
+export const stringifyFlop = (flop: Flop, scientific = false): string => {
   switch (flop.type) {
     case FlopType.POSITIVE_INFINITY:
       return POSITIVE_INFINITY_STRING;
@@ -341,7 +358,7 @@ export const stringifyFlop = (flop: Flop): string => {
     case FlopType.NAN:
       return NAN_STRING;
     case FlopType.NORMAL:
-      return flop.value.toFixed();
+      return scientific ? flop.value.toExponential() : flop.value.toFixed();
   }
 };
 
@@ -439,7 +456,12 @@ export const roundHalfToEven = (
   if (G === "1") {
     // 111, 101, 110
     if (R === "1" || S === "1") {
-      return roundHalfUp(exponent, integer, fractional, significandWidth);
+      return roundTowardInfinity(
+        exponent,
+        integer,
+        fractional,
+        significandWidth
+      );
     }
 
     const LSB = fractionalBits.substring(
@@ -449,23 +471,21 @@ export const roundHalfToEven = (
 
     // (1)100
     if (LSB === "1") {
-      return roundHalfUp(exponent, integer, fractional, significandWidth);
+      return roundTowardInfinity(
+        exponent,
+        integer,
+        fractional,
+        significandWidth
+      );
     }
   }
 
   // 0XX, (0)100
-  return {
-    exponent,
-    integer,
-    fractional: new BigNumber(
-      "." + fractionalBits.substring(0, significandWidth),
-      2
-    ),
-  };
+  return roundTowardZero(exponent, integer, fractional, significandWidth);
 };
 
 // TODO: Cleanup and add docs
-export const roundHalfUp = (
+export const roundTowardInfinity = (
   exponent: number,
   integer: BigNumber,
   fractional: BigNumber,
@@ -502,5 +522,28 @@ export const roundHalfUp = (
     exponent: newExponent,
     integer: newInteger,
     fractional: newFractional,
+  };
+};
+
+// TODO: Cleanup and add docs
+export const roundTowardZero = (
+  exponent: number,
+  integer: BigNumber,
+  fractional: BigNumber,
+  significandWidth: number
+): { exponent: number; integer: BigNumber; fractional: BigNumber } => {
+  const fractionalBits = fractional.toString(2).split(".")[1] ?? "";
+  // TODO: Is there a better way to handle this?
+  if (fractionalBits.length <= significandWidth) {
+    return { exponent, integer, fractional };
+  }
+
+  return {
+    exponent,
+    integer,
+    fractional: new BigNumber(
+      "." + fractionalBits.substring(0, significandWidth),
+      2
+    ),
   };
 };

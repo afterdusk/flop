@@ -15,7 +15,6 @@ const Wrapper = styled.div`
 `;
 
 const Row = styled.div`
-  min-width: 100%;
   min-height: 1.4rem;
   padding: 0.2rem;
 
@@ -34,6 +33,7 @@ const FieldName = styled.div`
 
 const InputField = styled.input`
   width: 100%;
+
   &:invalid {
     background-color: pink;
   }
