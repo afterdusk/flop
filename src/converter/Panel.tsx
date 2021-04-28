@@ -71,7 +71,7 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
 
   const onDecimalInput = (input: string, valid: boolean) => {
     setDecimalInput(input);
-    if (valid && input.length > 0) {
+    if (valid) {
       props.updateInputValue(input);
     }
   };

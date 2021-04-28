@@ -39,10 +39,6 @@ const Wrapper = styled.div`
   -moz-osx-font-smoothing: grayscale;
 `;
 
-const Divider = styled.hr`
-  width: 100%;
-`;
-
 const App: FC = (): ReactElement => {
   // configure bignumber.js library
   BigNumber.set({ DECIMAL_PLACES: BIGNUMBER_DECIMAL_PLACES });
@@ -55,7 +51,6 @@ const App: FC = (): ReactElement => {
       <FormatConverter {...FP16} />
       <FormatConverter {...BF16} />
       <FormatConverter {...TF32} />
-      <Divider />
       <Footer />
     </Wrapper>
   );

@@ -78,7 +78,7 @@ const FormatConverter: FC<FormatConverterProps> = (
     setFlop754(value);
   };
 
-  const onFlopUpdate = (value: Flop) => {
+  const onFlopUpdate = (value: Flop | null) => {
     setFlop(value);
   };
 
@@ -147,7 +147,9 @@ const FormatConverter: FC<FormatConverterProps> = (
         error={error ? stringifyFlop(error, scientificNotation) : ""}
         bits={[sign, exponent, significand].flat(1)}
         updateInputValue={(inputValue: string) =>
-          onFlopUpdate(generateFlop(inputValue))
+          onFlopUpdate(
+            inputValue.length === 0 ? null : generateFlop(inputValue)
+          )
         }
         updateValue={(bits: boolean[]) =>
           onFlop754Update(
