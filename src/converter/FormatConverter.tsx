@@ -1,7 +1,14 @@
 import React, { FC, ReactElement, useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { ROUNDING_MODE } from "../constants";
+import {
+  FLOP_STORAGE_KEY,
+  FLOP754_STORAGE_KEY,
+  NOTATION_STORAGE_KEY,
+  ROUNDING_MODE,
+  ROUNDING_STORAGE_KEY,
+} from "../constants";
+import useLocalStorage from "../hooks/useLocalStorage";
 import BitPanel from "./BitPanel";
 import ConfigPanel from "./ConfigPanel";
 import {
@@ -11,6 +18,8 @@ import {
   deconstructFlop754,
   defaultFlop,
   defaultFlop754,
+  deserializeFlop,
+  deserializeFlop754,
   Flop,
   Flop754,
   generateFlop,
@@ -43,17 +52,30 @@ interface FormatConverterProps {
 const FormatConverter: FC<FormatConverterProps> = (
   props: FormatConverterProps
 ): ReactElement => {
-  const [flop, setFlop] = useState<null | Flop>(null);
-  const [flop754, setFlop754] = useState(defaultFlop754(props.exponentWidth));
+  const [flop, setFlop] = useLocalStorage<null | Flop>(
+    `${props.name}${FLOP_STORAGE_KEY}`,
+    null,
+    deserializeFlop
+  );
+  const [flop754, setFlop754] = useLocalStorage(
+    `${props.name}${FLOP754_STORAGE_KEY}`,
+    defaultFlop754(props.exponentWidth),
+    deserializeFlop754
+  );
+  const [roundingMode, setRoundingMode] = useLocalStorage(
+    `${props.name}${ROUNDING_STORAGE_KEY}`,
+    ROUNDING_MODE.halfToEven
+  );
+  const [scientificNotation, setScientificNotation] = useLocalStorage(
+    `${props.name}${NOTATION_STORAGE_KEY}`,
+    false
+  );
   const [storedFlop, setStoredFlop] = useState(defaultFlop());
   const [error, setError] = useState<null | Flop>(null);
-  const [roundingMode, setRoundingMode] = useState(ROUNDING_MODE.halfToEven);
-  const [scientificNotation, setScientificNotation] = useState(false);
 
   const onFlop754Update = (value: Flop754) => {
     setFlop(null);
     setFlop754(value);
-    setStoredFlop(convertFlop754ToFlop(value));
   };
 
   const onFlopUpdate = (value: Flop) => {
@@ -69,6 +91,10 @@ const FormatConverter: FC<FormatConverterProps> = (
   };
 
   useEffect(() => {
+    setStoredFlop(convertFlop754ToFlop(flop754));
+  }, [flop754]);
+
+  useEffect(() => {
     if (flop !== null) {
       const updated754Value = convertFlopToFlop754(
         flop,
@@ -77,9 +103,14 @@ const FormatConverter: FC<FormatConverterProps> = (
         roundingMode
       );
       setFlop754(updated754Value);
-      setStoredFlop(convertFlop754ToFlop(updated754Value));
     }
-  }, [flop, roundingMode, props.exponentWidth, props.significandWidth]);
+  }, [
+    flop,
+    roundingMode,
+    setFlop754,
+    props.exponentWidth,
+    props.significandWidth,
+  ]);
 
   useEffect(() => {
     setError(flop ? calculateError(flop, storedFlop) : null);
@@ -110,6 +141,7 @@ const FormatConverter: FC<FormatConverterProps> = (
         ) => onFlop754Update(generateFlop754(sign, exponent, significand))}
       />
       <Panel
+        formatName={props.name}
         clearInput={flop === null}
         stored={stringifyFlop(storedFlop, scientificNotation)}
         error={error ? stringifyFlop(error, scientificNotation) : ""}

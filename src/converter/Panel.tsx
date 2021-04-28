@@ -1,7 +1,8 @@
 import React, { FC, ReactElement, useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { HEX_PREFIX_STRING } from "../constants";
+import { DECIMAL_INPUT_STORAGE_KEY, HEX_PREFIX_STRING } from "../constants";
+import useLocalStorage from "../hooks/useLocalStorage";
 import {
   bitsFromHexString,
   bitsFromString,
@@ -40,6 +41,7 @@ const InputField = styled.input`
 `;
 
 interface PanelProps {
+  formatName: string;
   clearInput: boolean;
   stored: string;
   error: string;
@@ -49,7 +51,10 @@ interface PanelProps {
 }
 
 const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
-  const [decimalInput, setDecimalInput] = useState("");
+  const [decimalInput, setDecimalInput] = useLocalStorage(
+    `${props.formatName}${DECIMAL_INPUT_STORAGE_KEY}`,
+    ""
+  );
   const [binaryRep, setBinaryRep] = useState(stringifyBits(props.bits));
   const [hexRep, setHexRep] = useState(stringifyBitsToHex(props.bits));
 
@@ -57,7 +62,7 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
     if (props.clearInput) {
       setDecimalInput("");
     }
-  }, [props.clearInput]);
+  }, [props.clearInput, setDecimalInput]);
 
   useEffect(() => {
     setBinaryRep(stringifyBits(props.bits));
@@ -66,7 +71,7 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
 
   const onDecimalInput = (input: string, valid: boolean) => {
     setDecimalInput(input);
-    if (valid) {
+    if (valid && input.length > 0) {
       props.updateInputValue(input);
     }
   };

@@ -31,6 +31,13 @@ export const BUILD_SOURCE_TEXT = {
   post: "",
 };
 
+// local storage
+export const DECIMAL_INPUT_STORAGE_KEY = "-input";
+export const FLOP_STORAGE_KEY = "-flop";
+export const FLOP754_STORAGE_KEY = "-flop754";
+export const ROUNDING_STORAGE_KEY = "-rounding";
+export const NOTATION_STORAGE_KEY = "-notation";
+
 // styling
 export const BACKGROUND_COLOR = "#0e171c";
 export const ACCENT_COLOR = "#039cfd";

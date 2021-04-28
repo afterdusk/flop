@@ -71,6 +71,17 @@ export const defaultFlop = (): Flop => {
 };
 
 /**
+ * Deserialize json string to Flop object.
+ * @param jsonString Flop serialized with JSON.stringify
+ * @returns deserialized Flop
+ */
+export const deserializeFlop = (jsonString: string): Flop => {
+  return JSON.parse(jsonString, (key, val) => {
+    return key === "value" ? new BigNumber(val) : val;
+  });
+};
+
+/**
  * Returns a Flop754 object from constituent boolean arrays representing bits.
  * @param sign sign bit
  * @param exponent exponent bits
@@ -120,6 +131,17 @@ export const defaultFlop754 = (exponentWidth: number): Flop754 => {
   const exponent = getExponentRange(exponentWidth).min;
   const significand = new BigNumber(0);
   return { type, sign, exponent, significand };
+};
+
+/**
+ * Deserialize json string to Flop754 object.
+ * @param jsonString Flop754 serialized with JSON.stringify
+ * @returns deserialized Flop754
+ */
+export const deserializeFlop754 = (jsonString: string): Flop754 => {
+  return JSON.parse(jsonString, (key, val) => {
+    return key === "significand" ? new BigNumber(val) : val;
+  });
 };
 
 /**

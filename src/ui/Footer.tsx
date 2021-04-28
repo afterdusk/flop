@@ -17,6 +17,10 @@ const Wrapper = styled.footer`
   padding: 1rem;
 `;
 
+const Divider = styled.hr`
+  width: 100%;
+`;
+
 const VersionNumber = styled.div`
   font-size: 1.4rem;
 `;
@@ -51,6 +55,7 @@ const TextWithLink: FC<TextWithLinkProps> = (
 
 const Footer: FC = (): ReactElement => (
   <Wrapper>
+    <Divider />
     <VersionNumber>
       <TextWithLink {...BUILD_SOURCE_TEXT} url={BUILD_SOURCE_URL} />
     </VersionNumber>
