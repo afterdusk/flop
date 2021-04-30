@@ -1,9 +1,5 @@
 // app
 export const APP_TITLE = "IEEE 754-Style Floating-Point Converter";
-export const POSITIVE_INFINITY_STRING = "infinity";
-export const NEGATIVE_INFINITY_STRING = "-infinity";
-export const NAN_STRING = "NaN";
-export const HEX_PREFIX_STRING = "0x";
 export const UI_ACKNOWLEDGEMENT_URL =
   "https://www.h-schmidt.net/FloatConverter/IEEE754.html";
 export const UI_ACKNOWLEDGEMENT_TEXT = {
@@ -30,6 +26,17 @@ export const BUILD_SOURCE_TEXT = {
   link: `${process.env.REACT_APP_GIT_SHA}`,
   post: "",
 };
+export const DECIMAL_INPUT_FIELD_NAME = "Decimal Input";
+export const VALUE_STORED_FIELD_NAME = "Value Stored";
+export const ERROR_FIELD_NAME = "Error";
+export const BIT_REPRESENTATION_FIELD_NAME = "Binary Representation";
+export const HEX_REPRESENTATION_FIELD = "Hex Representation";
+export const ROUNDING_MODE_FIELD_NAME = "Rounding Mode";
+export const NOTATION_FIELD_NAME = "Result Notation";
+export const POSITIVE_INFINITY_STRING = "infinity";
+export const NEGATIVE_INFINITY_STRING = "-infinity";
+export const NAN_STRING = "NaN";
+export const HEX_PREFIX_STRING = "0x";
 
 // local storage
 export const DECIMAL_INPUT_STORAGE_KEY = "-input";
@@ -52,32 +59,33 @@ export enum ROUNDING_MODE {
 }
 
 // formats
-export const FP64 = {
-  name: "FP64",
-  exponentWidth: 11,
-  significandWidth: 52,
-};
-
 export const FP32 = {
   name: "FP32",
   exponentWidth: 8,
   significandWidth: 23,
+  urlPath: "/float-converter",
 };
-
+export const FP64 = {
+  name: "FP64",
+  exponentWidth: 11,
+  significandWidth: 52,
+  urlPath: "/double-converter",
+};
 export const FP16 = {
   name: "FP16",
   exponentWidth: 5,
   significandWidth: 10,
+  urlPath: "/half-precision-converter",
 };
-
 export const BF16 = {
   name: "bfloat16",
   exponentWidth: 8,
   significandWidth: 7,
+  urlPath: "/brainfloat-converter",
 };
-
 export const TF32 = {
   name: "TensorFloat-32",
   exponentWidth: 8,
   significandWidth: 10,
+  urlPath: "/tensorfloat-converter",
 };

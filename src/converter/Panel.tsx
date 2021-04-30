@@ -1,7 +1,15 @@
 import React, { FC, ReactElement, useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { DECIMAL_INPUT_STORAGE_KEY, HEX_PREFIX_STRING } from "../constants";
+import {
+  BIT_REPRESENTATION_FIELD_NAME,
+  DECIMAL_INPUT_FIELD_NAME,
+  DECIMAL_INPUT_STORAGE_KEY,
+  ERROR_FIELD_NAME,
+  HEX_PREFIX_STRING,
+  HEX_REPRESENTATION_FIELD,
+  VALUE_STORED_FIELD_NAME,
+} from "../constants";
 import useLocalStorage from "../hooks/useLocalStorage";
 import {
   bitsFromHexString,
@@ -95,10 +103,11 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
       {/* Decimal Input */}
       <Row>
         <Col size={2}>
-          <FieldName>Decimal Input</FieldName>
+          <FieldName>{DECIMAL_INPUT_FIELD_NAME}</FieldName>
         </Col>
         <Col size={5}>
           <InputField
+            title={DECIMAL_INPUT_FIELD_NAME}
             type="text"
             pattern={`^[+-]?\\d*(?:\\.?\\d*(?:[eE][+-]?\\d+)?)?$`}
             value={decimalInput}
@@ -111,28 +120,39 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
       {/* Value Stored */}
       <Row>
         <Col size={2}>
-          <FieldName>Value Stored</FieldName>
+          <FieldName>{VALUE_STORED_FIELD_NAME}</FieldName>
         </Col>
         <Col size={5}>
-          <InputField disabled readOnly value={props.stored} />
+          <InputField
+            title={VALUE_STORED_FIELD_NAME}
+            disabled
+            readOnly
+            value={props.stored}
+          />
         </Col>
       </Row>
       {/* Error */}
       <Row>
         <Col size={2}>
-          <FieldName>Error</FieldName>
+          <FieldName>{ERROR_FIELD_NAME}</FieldName>
         </Col>
         <Col size={5}>
-          <InputField disabled readOnly value={props.error} />
+          <InputField
+            title={ERROR_FIELD_NAME}
+            disabled
+            readOnly
+            value={props.error}
+          />
         </Col>
       </Row>
       {/* Binary Representation */}
       <Row>
         <Col size={2}>
-          <FieldName>Binary Representation</FieldName>
+          <FieldName>{BIT_REPRESENTATION_FIELD_NAME}</FieldName>
         </Col>
         <Col size={5}>
           <InputField
+            title={BIT_REPRESENTATION_FIELD_NAME}
             pattern={`^[01]{${props.bits.length}}$`}
             value={binaryRep}
             onChange={(e) =>
@@ -144,11 +164,12 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
       {/* Hexadecimal Representation */}
       <Row>
         <Col size={2}>
-          <FieldName>Hex Representation</FieldName>
+          <FieldName>{HEX_REPRESENTATION_FIELD}</FieldName>
         </Col>
         <Col size={5}>
           {HEX_PREFIX_STRING}
           <InputField
+            title={HEX_REPRESENTATION_FIELD}
             pattern={`^[a-fA-F0-9]{${Math.floor(props.bits.length / 4)}}$`}
             value={hexRep}
             onChange={(e) =>

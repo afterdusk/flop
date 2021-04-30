@@ -1,7 +1,11 @@
 import React, { FC, ReactElement } from "react";
 import styled from "styled-components";
 
-import { ROUNDING_MODE } from "../constants";
+import {
+  NOTATION_FIELD_NAME,
+  ROUNDING_MODE,
+  ROUNDING_MODE_FIELD_NAME,
+} from "../constants";
 
 const Wrapper = styled.div`
   box-sizing: border-box;
@@ -50,7 +54,7 @@ const ConfigPanel: FC<ConfigPanelProps> = (
       {/* Rounding Mode */}
       <Row>
         <Col size={2}>
-          <FieldName>Rounding Mode</FieldName>
+          <FieldName>{ROUNDING_MODE_FIELD_NAME}</FieldName>
         </Col>
         <Col size={5}>
           <RadioLabel>
@@ -80,7 +84,7 @@ const ConfigPanel: FC<ConfigPanelProps> = (
       {/* Result Notation */}
       <Row>
         <Col size={2}>
-          <FieldName>Result Notation</FieldName>
+          <FieldName>{NOTATION_FIELD_NAME}</FieldName>
         </Col>
         <Col size={5}>
           <RadioLabel>
