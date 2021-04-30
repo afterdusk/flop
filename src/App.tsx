@@ -14,6 +14,7 @@ import {
 import FormatConverter from "./converter/FormatConverter";
 import Footer from "./ui/Footer";
 import Header from "./ui/Header";
+import Tabs from "./ui/Tabs";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -46,11 +47,13 @@ const App: FC = (): ReactElement => {
   return (
     <Wrapper>
       <Header />
-      <FormatConverter {...FP32} />
-      <FormatConverter {...FP64} />
-      <FormatConverter {...FP16} />
-      <FormatConverter {...BF16} />
-      <FormatConverter {...TF32} />
+      <Tabs>
+        <FormatConverter {...FP32} />
+        <FormatConverter {...FP64} />
+        <FormatConverter {...FP16} />
+        <FormatConverter {...BF16} />
+        <FormatConverter {...TF32} />
+      </Tabs>
       <Footer />
     </Wrapper>
   );

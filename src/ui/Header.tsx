@@ -11,10 +11,10 @@ const Title = styled.h1`
   font-size: 2.4rem;
 `;
 
-const Footer: FC = (): ReactElement => (
+const Header: FC = (): ReactElement => (
   <Wrapper>
     <Title>{APP_TITLE}</Title>
   </Wrapper>
 );
 
-export default Footer;
+export default Header;
