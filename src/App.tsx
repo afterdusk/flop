@@ -12,12 +12,14 @@ import {
   BACKGROUND_COLOR,
   BF16,
   BIGNUMBER_DECIMAL_PLACES,
+  CUSTOM,
   FP16,
   FP32,
   FP64,
   MAIN_FONT_FAMILY,
   TF32,
 } from "./constants";
+import CustomFormatConverter from "./converter/CustomFormatConverter";
 import FormatConverter from "./converter/FormatConverter";
 import Footer from "./ui/Footer";
 import Header from "./ui/Header";
@@ -50,6 +52,9 @@ const App: FC = (): ReactElement => {
   const formats = [FP32, FP64, FP16, BF16, TF32];
   const defaultFormatIndex = 0;
 
+  // custom format
+  const custom = CUSTOM;
+
   // current tab
   const [active, setActive] = useState(defaultFormatIndex);
 
@@ -64,7 +69,11 @@ const App: FC = (): ReactElement => {
     <Wrapper>
       <Header />
       <Router>
-        <TabBar tabs={formats} activeTab={active} clickTab={onTabChange} />
+        <TabBar
+          tabs={[...formats, custom]}
+          activeTab={active}
+          clickTab={onTabChange}
+        />
         <Switch>
           <Route
             exact
@@ -81,6 +90,13 @@ const App: FC = (): ReactElement => {
               }}
             />
           ))}
+          <Route
+            path={custom.urlPath}
+            render={() => {
+              onTabChange(formats.length);
+              return <CustomFormatConverter {...custom} />;
+            }}
+          />
         </Switch>
       </Router>
       <Footer />

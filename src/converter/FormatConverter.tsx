@@ -116,6 +116,12 @@ const FormatConverter: FC<FormatConverterProps> = (
     setError(flop ? calculateError(flop, storedFlop) : null);
   }, [flop, storedFlop]);
 
+  // clear states with values if component widths change
+  useEffect(() => {
+    setFlop(null);
+    setFlop754(defaultFlop754(props.exponentWidth));
+  }, [setFlop, setFlop754, props.exponentWidth, props.significandWidth]);
+
   const { sign, exponent, significand } = deconstructFlop754(
     flop754,
     props.exponentWidth,

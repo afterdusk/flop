@@ -33,6 +33,10 @@ export const BIT_REPRESENTATION_FIELD_NAME = "Binary Representation";
 export const HEX_REPRESENTATION_FIELD = "Hex Representation";
 export const ROUNDING_MODE_FIELD_NAME = "Rounding Mode";
 export const NOTATION_FIELD_NAME = "Result Notation";
+export const FIXED_SIGN_FIELD_NAME = "Sign Length";
+export const CUSTOM_EXPONENT_FIELD_NAME = "Exponent Length";
+export const CUSTOM_SIGNIFICAND_FIELD_NAME = "Significand Length";
+export const TOTAL_WIDTH_FIELD_NAME = "Total Length";
 export const CLIPBOARD_TOOLTIP_STRING = "Copy to Clipboard";
 export const CLIPBOARD_BUTTON_STRING = "Copy";
 export const POSITIVE_INFINITY_STRING = "infinity";
@@ -46,6 +50,8 @@ export const FLOP_STORAGE_KEY = "-flop";
 export const FLOP754_STORAGE_KEY = "-flop754";
 export const ROUNDING_STORAGE_KEY = "-rounding";
 export const NOTATION_STORAGE_KEY = "-notation";
+export const CUSTOM_EXPONENT_KEY = "custom-exponent";
+export const CUSTOM_SIGNIFICAND_KEY = "custom-significand";
 
 // styling
 export const BACKGROUND_COLOR = "#0e171c";
@@ -92,4 +98,12 @@ export const TF32 = {
   exponentWidth: 8,
   significandWidth: 10,
   urlPath: "/tensorfloat-converter",
+};
+export const CUSTOM = {
+  name: "Custom",
+  minExponentWidth: 2,
+  maxExponentWidth: 11,
+  minSignificandWidth: 1,
+  maxSignificandWidth: 52,
+  urlPath: "/arbitrary-float-converter",
 };
