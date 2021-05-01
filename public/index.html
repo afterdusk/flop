@@ -52,6 +52,15 @@
         }
       })(window.location);
     </script>
+    <!--
+      Import statements do not work in styled-components createGlobalStyles,
+      import fonts here instead.
+      https://github.com/styled-components/styled-components/issues/3038
+    -->
+    <style>
+      /* Roboto, Roboto Mono */
+      @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:wght@400;700&display=swap");
+    </style>
     <title>IEEE 754-Style Floating-Point Converter</title>
   </head>
   <body>

@@ -15,6 +15,7 @@ import {
   FP16,
   FP32,
   FP64,
+  MAIN_FONT_FAMILY,
   TF32,
 } from "./constants";
 import FormatConverter from "./converter/FormatConverter";
@@ -37,11 +38,9 @@ const Wrapper = styled.div`
   overflow: auto;
 
   background-color: ${BACKGROUND_COLOR};
-  text-align: center;
   color: white;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  text-align: center;
+  font-family: ${MAIN_FONT_FAMILY};
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 `;

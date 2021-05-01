@@ -33,6 +33,8 @@ export const BIT_REPRESENTATION_FIELD_NAME = "Binary Representation";
 export const HEX_REPRESENTATION_FIELD = "Hex Representation";
 export const ROUNDING_MODE_FIELD_NAME = "Rounding Mode";
 export const NOTATION_FIELD_NAME = "Result Notation";
+export const CLIPBOARD_TOOLTIP_STRING = "Copy to Clipboard";
+export const CLIPBOARD_BUTTON_STRING = "Copy";
 export const POSITIVE_INFINITY_STRING = "infinity";
 export const NEGATIVE_INFINITY_STRING = "-infinity";
 export const NAN_STRING = "NaN";
@@ -48,6 +50,8 @@ export const NOTATION_STORAGE_KEY = "-notation";
 // styling
 export const BACKGROUND_COLOR = "#0e171c";
 export const ACCENT_COLOR = "#039cfd";
+export const MAIN_FONT_FAMILY = `'Roboto', sans-serif;`;
+export const MONOSPACED_FONT_FAMILY = `'Roboto Mono', monospace`;
 
 // bignumber.js
 export const BIGNUMBER_DECIMAL_PLACES = 3000;
