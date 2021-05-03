@@ -399,10 +399,12 @@ export const stringifyBits = (bits: boolean[]): string => {
  * @returns hexadecimal string
  */
 export const stringifyBitsToHex = (bits: boolean[]): string => {
-  return Array.from(Array(Math.floor(bits.length / 4)).keys())
-    .map((i) => i * 4)
-    .map((i) => bits.slice(i, i + 4))
+  return Array.from(Array(Math.ceil(bits.length / 4)).keys())
+    .reverse()
+    .map((i) => -(i * 4 + 1))
+    .map((i) => bits.concat(false).slice(i - 4, i))
     .map((e) => stringifyBits(e))
+    .map((e) => e.padStart(4, "0"))
     .map((e) => parseInt(e, 2).toString(16))
     .join("");
 };
@@ -419,15 +421,20 @@ export const bitsFromString = (bitString: string): boolean[] => {
 /**
  * Converts hexadecimal string to bit array.
  * @param hexString hexadecimal string
+ * @param bitLength length of output binary string (hex string length * 4 if not provided)
  * @returns boolean array representing bits
  */
-export const bitsFromHexString = (hexString: string): boolean[] => {
+export const bitsFromHexString = (
+  hexString: string,
+  bitLength: number = hexString.length * 4
+): boolean[] => {
   return hexString
     .split("")
     .map((e) => parseInt(e, 16).toString(2).padStart(4, "0"))
     .map((e) => e.split(""))
     .flat(1)
-    .map((e) => (e === "1" ? true : false));
+    .map((e) => (e === "1" ? true : false))
+    .slice(-bitLength);
 };
 
 /**

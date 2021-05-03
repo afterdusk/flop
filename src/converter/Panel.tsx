@@ -129,7 +129,7 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
   const onHexInput = (input: string, valid: boolean) => {
     setHexRep(input);
     if (valid) {
-      props.updateValue(bitsFromHexString(input));
+      props.updateValue(bitsFromHexString(input, props.bits.length));
     }
   };
 
@@ -210,6 +210,7 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
         <Col size={5}>
           <InputField
             title={BIT_REPRESENTATION_FIELD_NAME}
+            required
             pattern={`^[01]{${props.bits.length}}$`}
             value={binaryRep}
             onChange={(e) =>
@@ -233,7 +234,8 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
           {HEX_PREFIX_STRING}
           <InputField
             title={HEX_REPRESENTATION_FIELD}
-            pattern={`^[a-fA-F0-9]{${Math.floor(props.bits.length / 4)}}$`}
+            required
+            pattern={`^[a-fA-F0-9]{${Math.ceil(props.bits.length / 4)}}$`}
             value={hexRep}
             ref={clipboard.target}
             onChange={(e) =>
