@@ -1,23 +1,21 @@
 import BigNumber from "bignumber.js";
-import React, { FC, ReactElement, useState } from "react";
+import React, { FC, ReactElement, useEffect, useMemo, useState } from "react";
 import {
-  BrowserRouter as Router,
   Redirect,
   Route,
   Switch,
+  useHistory,
+  useLocation,
 } from "react-router-dom";
 import styled from "styled-components";
 
 import {
   BACKGROUND_COLOR,
-  BF16,
   BIGNUMBER_DECIMAL_PLACES,
   CUSTOM,
-  FP16,
-  FP32,
-  FP64,
+  DEFAULT_FORMAT_INDEX,
+  FORMATS,
   MAIN_FONT_FAMILY,
-  TF32,
 } from "./constants";
 import CustomFormatConverter from "./converter/CustomFormatConverter";
 import FormatConverter from "./converter/FormatConverter";
@@ -48,57 +46,43 @@ const Wrapper = styled.div`
 `;
 
 const App: FC = (): ReactElement => {
-  // supported formats
-  const formats = [FP32, FP64, FP16, BF16, TF32];
-  const defaultFormatIndex = 0;
-
-  // custom format
-  const custom = CUSTOM;
-
-  // current tab
-  const [active, setActive] = useState(defaultFormatIndex);
+  const [active, setActive] = useState(DEFAULT_FORMAT_INDEX);
+  const location = useLocation();
+  const history = useHistory();
+  const tabs = useMemo(() => [...FORMATS, CUSTOM], []);
 
   // configure bignumber.js library
   BigNumber.set({ DECIMAL_PLACES: BIGNUMBER_DECIMAL_PLACES });
 
-  const onTabChange = (target: number) => {
-    setActive(target);
+  const onTabChange = (urlPath: string) => {
+    history.push(urlPath);
   };
+
+  useEffect(() => {
+    const index = tabs.findIndex((e) => e.urlPath === location.pathname);
+    if (index !== -1) {
+      setActive(index);
+      document.title = tabs[index].pageTitle;
+    }
+  }, [location, tabs]);
 
   return (
     <Wrapper>
       <Header />
-      <Router>
-        <TabBar
-          tabs={[...formats, custom]}
-          activeTab={active}
-          clickTab={onTabChange}
-        />
-        <Switch>
-          <Route
-            exact
-            path={"/"}
-            render={() => <Redirect to={formats[defaultFormatIndex].urlPath} />}
-          />
-          {formats.map((e, i) => (
-            <Route
-              key={i}
-              path={e.urlPath}
-              render={() => {
-                onTabChange(i);
-                return <FormatConverter key={i} {...e} />;
-              }}
-            />
-          ))}
-          <Route
-            path={custom.urlPath}
-            render={() => {
-              onTabChange(formats.length);
-              return <CustomFormatConverter {...custom} />;
-            }}
-          />
-        </Switch>
-      </Router>
+      <TabBar tabs={tabs} activeTab={active} clickTab={onTabChange} />
+      <Switch>
+        {FORMATS.map((e, i) => (
+          <Route key={i} path={e.urlPath}>
+            <FormatConverter key={i} {...e} />
+          </Route>
+        ))}
+        <Route path={CUSTOM.urlPath}>
+          <CustomFormatConverter {...CUSTOM} />
+        </Route>
+        <Route path={"/"}>
+          <Redirect to={FORMATS[DEFAULT_FORMAT_INDEX].urlPath} />
+        </Route>
+      </Switch>
       <Footer />
     </Wrapper>
   );

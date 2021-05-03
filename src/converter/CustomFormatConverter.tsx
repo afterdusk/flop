@@ -12,7 +12,7 @@ import {
 import useLocalStorage from "../hooks/useLocalStorage";
 import FormatConverter from "./FormatConverter";
 
-const Wrapper = styled(React.Fragment)``;
+const Wrapper = React.Fragment;
 
 const WidthPanel = styled.div`
   max-width: 60%;

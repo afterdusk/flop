@@ -147,7 +147,7 @@ const Panel: FC<PanelProps> = (props: PanelProps): ReactElement => {
         <Col size={5}>
           <InputField
             title={DECIMAL_INPUT_FIELD_NAME}
-            type="text"
+            autoFocus
             pattern={`^[+-]?\\d*(?:\\.?\\d*(?:[eE][+-]?\\d+)?)?$`}
             value={decimalInput}
             onChange={(e) =>

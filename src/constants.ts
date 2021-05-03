@@ -74,31 +74,38 @@ export const FP32 = {
   exponentWidth: 8,
   significandWidth: 23,
   urlPath: "/float-converter",
+  pageTitle: "Float Converter",
 };
 export const FP64 = {
   name: "FP64",
   exponentWidth: 11,
   significandWidth: 52,
   urlPath: "/double-converter",
+  pageTitle: "Double Converter",
 };
 export const FP16 = {
   name: "FP16",
   exponentWidth: 5,
   significandWidth: 10,
   urlPath: "/half-precision-converter",
+  pageTitle: "Half Precision Converter",
 };
 export const BF16 = {
   name: "bfloat16",
   exponentWidth: 8,
   significandWidth: 7,
   urlPath: "/brainfloat-converter",
+  pageTitle: "Brain Float Converter",
 };
 export const TF32 = {
   name: "TensorFloat-32",
   exponentWidth: 8,
   significandWidth: 10,
   urlPath: "/tensorfloat-converter",
+  pageTitle: "TensorFloat Converter",
 };
+export const FORMATS = [FP32, FP64, FP16, BF16, TF32];
+export const DEFAULT_FORMAT_INDEX = 0;
 export const CUSTOM = {
   name: "Custom",
   minExponentWidth: 2,
@@ -106,4 +113,5 @@ export const CUSTOM = {
   minSignificandWidth: 1,
   maxSignificandWidth: 52,
   urlPath: "/arbitrary-float-converter",
+  pageTitle: "Arbitrary Float Converter",
 };

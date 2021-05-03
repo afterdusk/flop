@@ -1,5 +1,4 @@
 import React, { FC, ReactElement } from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 import { BACKGROUND_COLOR } from "../constants";
@@ -36,22 +35,22 @@ interface TabBarProps {
     urlPath: string;
   }[];
   activeTab: number;
-  clickTab: (index: number) => void;
+  clickTab: (urlPath: string) => void;
 }
 
 const TabBar: FC<TabBarProps> = (props: TabBarProps): ReactElement => (
   <Wrapper>
     {props.tabs.map((e, i) => (
-      <Link key={i} to={e.urlPath}>
-        <TabButton
-          key={i}
-          title={e.name}
-          className={i === props.activeTab ? "active" : ""}
-          onClick={() => props.clickTab(i)}
-        >
-          {e.name}
-        </TabButton>
-      </Link>
+      <TabButton
+        key={i}
+        title={e.name}
+        className={i === props.activeTab ? "active" : ""}
+        onClick={() =>
+          i !== props.activeTab ? props.clickTab(e.urlPath) : null
+        }
+      >
+        {e.name}
+      </TabButton>
     ))}
   </Wrapper>
 );
