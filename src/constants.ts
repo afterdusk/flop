@@ -1,5 +1,6 @@
 // app
 export const APP_TITLE = "IEEE 754-Style Floating-Point Converter";
+export const GA_UA_ID = "UA-165443113-2";
 export const UI_ACKNOWLEDGEMENT_URL =
   "https://www.h-schmidt.net/FloatConverter/IEEE754.html";
 export const UI_ACKNOWLEDGEMENT_TEXT = {
@@ -26,6 +27,7 @@ export const BUILD_SOURCE_TEXT = {
   link: `${process.env.REACT_APP_GIT_SHA}`,
   post: "",
 };
+export const IS_TEST_ENV = process.env.NODE_ENV === "test";
 export const DECIMAL_INPUT_FIELD_NAME = "Decimal Input";
 export const VALUE_STORED_FIELD_NAME = "Value Stored";
 export const ERROR_FIELD_NAME = "Error";

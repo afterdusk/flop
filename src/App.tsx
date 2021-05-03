@@ -1,5 +1,6 @@
 import BigNumber from "bignumber.js";
 import React, { FC, ReactElement, useEffect, useMemo, useState } from "react";
+import ReactGA from "react-ga";
 import {
   Redirect,
   Route,
@@ -15,6 +16,8 @@ import {
   CUSTOM,
   DEFAULT_FORMAT_INDEX,
   FORMATS,
+  GA_UA_ID,
+  IS_TEST_ENV,
   MAIN_FONT_FAMILY,
 } from "./constants";
 import CustomFormatConverter from "./converter/CustomFormatConverter";
@@ -53,6 +56,13 @@ const App: FC = (): ReactElement => {
 
   // configure bignumber.js library
   BigNumber.set({ DECIMAL_PLACES: BIGNUMBER_DECIMAL_PLACES });
+
+  // set up google analytics
+  ReactGA.initialize(GA_UA_ID, { testMode: IS_TEST_ENV });
+  history.listen((location, action) => {
+    ReactGA.pageview(location.pathname);
+    ReactGA.set({ page: location.pathname, action: action });
+  });
 
   const onTabChange = (urlPath: string) => {
     history.push(urlPath);
