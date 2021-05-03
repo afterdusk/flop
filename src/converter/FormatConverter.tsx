@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useEffect, useState } from "react";
+import React, { FC, ReactElement, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 import {
@@ -52,6 +52,7 @@ interface FormatConverterProps {
 const FormatConverter: FC<FormatConverterProps> = (
   props: FormatConverterProps
 ): ReactElement => {
+  const initialLoad = useRef(true);
   const [flop, setFlop] = useLocalStorage<null | Flop>(
     `${props.name}${FLOP_STORAGE_KEY}`,
     null,
@@ -116,8 +117,12 @@ const FormatConverter: FC<FormatConverterProps> = (
     setError(flop ? calculateError(flop, storedFlop) : null);
   }, [flop, storedFlop]);
 
-  // clear states with values if component widths change
+  // clear states with values if component widths are set after initial load
   useEffect(() => {
+    if (initialLoad.current) {
+      initialLoad.current = false;
+      return;
+    }
     setFlop(null);
     setFlop754(defaultFlop754(props.exponentWidth));
   }, [setFlop, setFlop754, props.exponentWidth, props.significandWidth]);
