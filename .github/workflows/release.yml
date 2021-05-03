@@ -1,0 +1,43 @@
+name: release
+on:
+  release:
+    types: [published, edited, deleted]
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    name: CI
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - name: Install Dependencies
+        run: yarn install
+      - name: Run Prettier
+        run: yarn pretty-check .
+      - name: Run ESLint
+        run: yarn lint-check src
+      - name: Run Tests
+        run: yarn test
+  cd:
+    runs-on: ubuntu-latest
+    name: CD
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - name: Install and Build
+        run: |
+          yarn install
+          yarn build
+      - name: Deploy
+        run: |
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          yarn deploy -u "github-actions-bot <support+actions@github.com>"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

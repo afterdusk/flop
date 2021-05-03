@@ -8,7 +8,7 @@ on:
       - main
 jobs:
   ci:
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-latest
     name: CI
     steps:
       - name: Checkout
@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v2
         with:
-          node-version: "12"
+          node-version: "14"
       - name: Install Dependencies
         run: yarn install
       - name: Run Prettier
