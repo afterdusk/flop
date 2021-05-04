@@ -6,6 +6,10 @@
 
 Floating-point converter for _FP32_, _FP64_, _FP16_, _bfloat16_, _TensorFloat-32_ and arbitrary IEEE 754-style floating-point types.
 
+<p align="center">
+  <img src="preview.png" alt="preview"/>
+</p>
+
 This is a website for hands-on exploration of floating-point types, and a convenience tool for sanity checks and low-level debugging.
 
 ## Features
