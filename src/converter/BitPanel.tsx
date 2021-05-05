@@ -12,6 +12,11 @@ const Wrapper = styled.div`
   overflow-x: auto;
 `;
 
+const Superscript = styled.sup`
+  line-height: 0;
+  vertical-align: super;
+`;
+
 interface BitPanelProps {
   name: string;
   sign: boolean[];
@@ -27,6 +32,12 @@ interface BitPanelProps {
 }
 
 const BitPanel: FC<BitPanelProps> = (props: BitPanelProps): ReactElement => {
+  const formattedExponentValue = (
+    <>
+      2<Superscript>{props.exponentValue}</Superscript>
+    </>
+  );
+
   return (
     <Wrapper>
       <BitSegment
@@ -40,7 +51,7 @@ const BitPanel: FC<BitPanelProps> = (props: BitPanelProps): ReactElement => {
       />
       <BitSegment
         name="Exponent"
-        value={"2^" + props.exponentValue}
+        value={formattedExponentValue}
         decimal={parseInt(stringifyBits(props.exponent), 2).toFixed()}
         bits={props.exponent}
         updateBits={(bits: boolean[]) =>

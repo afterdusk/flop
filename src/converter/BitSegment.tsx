@@ -38,7 +38,7 @@ const BitCheckbox = styled.input``;
 
 interface SegmentProps {
   name: string;
-  value: string;
+  value: string | ReactElement;
   decimal: string;
   bits: boolean[];
   updateBits: (bits: boolean[]) => void;
